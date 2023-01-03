@@ -1,5 +1,6 @@
 package main;
 
+import controller.LogInForm;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +15,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/log_in_form.fxml")));
-        primaryStage.setTitle("C195 PA");
+        primaryStage.setTitle("Sign In");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.show();
     }
