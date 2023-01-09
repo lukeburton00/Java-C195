@@ -2,72 +2,87 @@ package model;
 
 import java.time.LocalDateTime;
 
-public class Appointment {
-    int id, customer_id, user_id, contact_id;
-    String title, description, location, type;
-    LocalDateTime start, end;
+public class Appointment
+{
+    private int mID, mCustomerID, mUserID, mContactID;
+    private String mTitle, mDescription, mLocation, mType;
+    private LocalDateTime mStart, mEnd;
 
     Appointment(int id, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customer_id, int user_id, int contact_id)
     {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.location = location;
-        this.type = type;
-        this.start = start;
-        this.end = end;
-        this.customer_id = id;
-        this.user_id = id;
-        this.contact_id = id;
+        mID = id;
+        mTitle = title;
+        mDescription = description;
+        mLocation = location;
+        mType = type;
+        mStart = start;
+        mEnd = end;
+        mCustomerID = customer_id;
+        mUserID = user_id;
+        mContactID = contact_id;
     }
 
-    int getId()
+    public int getID()
     {
-        return id;
+        return mID;
     }
 
-    int getCustomerId()
+    public void setID(int ID) { mID = ID; }
+
+    public int getCustomerID()
     {
-        return customer_id;
+        return mCustomerID;
     }
 
-    int getUserId()
+    public void setCustomerID(int customerID) { mCustomerID = customerID; }
+
+    public int getUserID()
     {
-        return user_id;
+        return mUserID;
     }
 
-    int getContactId()
+    public void setUserID(int userID) { mUserID = userID; }
+
+    public int getContactID()
     {
-        return contact_id;
+        return mContactID;
     }
 
-    String getTitle()
+    public void setContactID(int contactID) { mContactID = contactID; }
+
+    public String getTitle() { return mTitle; }
+
+    public void setTitle(String title) { mTitle = title; }
+
+    public String getDescription()
     {
-        return title;
+        return mDescription;
     }
 
-    String getDescription()
+    public void setDescription(String description) { mDescription = description; }
+
+    public String getLocation() { return mLocation; }
+
+    public void setLocation(String location) { mLocation = location; }
+
+    public String getType()
     {
-        return description;
+        return mType;
     }
 
-    String getLocation()
+    public void setType(String type) { mType = type; }
+
+    public LocalDateTime getStart()
     {
-        return location;
+        return mStart;
     }
 
-    String getType()
+    public void setStart(LocalDateTime start) { mStart = start; }
+
+    public LocalDateTime getEnd()
     {
-        return type;
+        return mEnd;
     }
 
-    LocalDateTime getStart()
-    {
-        return start;
-    }
-
-    LocalDateTime getEnd()
-    {
-        return end;
-    }
+    public void setEnd(LocalDateTime end) { mEnd = end; }
 }

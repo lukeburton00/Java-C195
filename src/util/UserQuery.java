@@ -17,7 +17,6 @@ public abstract class UserQuery {
         preparedStatement.setString(2,password);
 
         // Execute Statement and return number of rows affected
-        int rowsAffected = preparedStatement.executeUpdate();
-        return rowsAffected;
+        return preparedStatement.executeUpdate();
     }
 }
