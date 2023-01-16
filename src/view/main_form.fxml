@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="820.0" prefWidth="852.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainForm">
+   <children>
+      <TableView fx:id="customersTable" layoutX="203.0" layoutY="114.0" prefHeight="200.0" prefWidth="447.0">
+        <columns>
+          <TableColumn fx:id="customerIDColumn" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="customerNameColumn" prefWidth="75.0" text="Name" />
+            <TableColumn fx:id="customerAddressColumn" prefWidth="75.0" text="Address" />
+            <TableColumn fx:id="customerPostalColumn" prefWidth="75.0" text="Postal" />
+            <TableColumn fx:id="customerPhoneColumn" prefWidth="75.0" text="Phone" />
+            <TableColumn fx:id="customerDivisionColumn" prefWidth="75.0" text="Division" />
+        </columns>
+      </TableView>
+      <TableView fx:id="appointmentsTable" layoutX="52.0" layoutY="480.0" prefHeight="200.0" prefWidth="749.0">
+        <columns>
+          <TableColumn fx:id="appointmentIDColumn" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="appointmentTitleColumn" prefWidth="75.0" text="Title" />
+            <TableColumn fx:id="appointmentDescriptionColumn" prefWidth="75.0" text="Description" />
+            <TableColumn fx:id="appointmentLocationColumn" prefWidth="75.0" text="Location" />
+            <TableColumn fx:id="appointmentTypeColumn" prefWidth="75.0" text="Type" />
+            <TableColumn fx:id="appointmentStartColumn" prefWidth="75.0" text="Start" />
+            <TableColumn fx:id="appointmentEndColumn" prefWidth="75.0" text="End" />
+            <TableColumn fx:id="appointmentCustomerIDColumn" prefWidth="75.0" text="CustomerID" />
+            <TableColumn fx:id="appointmentUserIDColumn" prefWidth="75.0" text="User ID" />
+            <TableColumn fx:id="appointmentContactIDColumn" prefWidth="75.0" text="ContactID" />
+        </columns>
+      </TableView>
+      <Label layoutX="398.0" layoutY="72.0" text="Customers" />
+      <Label layoutX="388.0" layoutY="436.0" text="Appointments" />
+   </children>
+</AnchorPane>
