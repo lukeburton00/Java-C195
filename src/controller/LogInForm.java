@@ -18,11 +18,11 @@ import java.util.Objects;
 
 public class LogInForm {
     public ObservableList<String> language = FXCollections.observableArrayList("English", "French");
-    public TextField userIdField;
-    public TextField passwordField;
     public Button signInButton;
     public ChoiceBox<String> languageSelectionBox;
     public Label locationLabel;
+    public TextField userNameField;
+    public PasswordField passwordField;
 
     public void initialize()
     {
@@ -34,7 +34,7 @@ public class LogInForm {
     public void onSignIn(ActionEvent actionEvent) throws IOException, SQLException {
         System.out.println("Sign in button pressed.");
 
-        if (UserQuery.authenticate(userIdField.getText(), passwordField.getText()))
+        if (UserQuery.authenticate(userNameField.getText(), passwordField.getText()))
         {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/main_form.fxml")));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
