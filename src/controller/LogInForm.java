@@ -14,6 +14,8 @@ import util.UserQuery;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.ZoneId;
+import java.util.Locale;
 import java.util.Objects;
 
 public class LogInForm {
@@ -24,11 +26,18 @@ public class LogInForm {
     public TextField userNameField;
     public PasswordField passwordField;
 
+    private Locale systemLanguage;
+
     public void initialize()
     {
         System.out.println("Login form initialized.");
         languageSelectionBox.setValue("English");
         languageSelectionBox.setItems(language);
+
+        locationLabel.setText(String.valueOf(ZoneId.systemDefault()));
+        systemLanguage = Locale.getDefault();
+
+        System.out.println(systemLanguage);
     }
 
     public void onSignIn(ActionEvent actionEvent) throws IOException, SQLException {
@@ -39,7 +48,7 @@ public class LogInForm {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/main_form.fxml")));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("Customers");
-            stage.setScene(new Scene(root, 852,820));
+            stage.setScene(new Scene(root, 959,626));
             stage.show();
         }
 

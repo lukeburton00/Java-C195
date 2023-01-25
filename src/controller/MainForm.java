@@ -1,16 +1,25 @@
 package controller;
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import model.Appointment;
 import model.Customer;
 import util.AppointmentQuery;
 import util.CustomerQuery;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.util.Objects;
 
 public class MainForm
 {
@@ -35,6 +44,12 @@ public class MainForm
     public TableColumn<Appointment, Integer> appointmentCustomerIDColumn;
     public TableColumn<Appointment, Integer> appointmentUserIDColumn;
     public TableColumn<Appointment, Integer> appointmentContactIDColumn;
+    public Button addCustomerButton;
+    public Button updateCustomerButton;
+    public Button deleteCustomerButton;
+    public Button addAppointmentButton;
+    public Button updateAppointmentButton;
+    public Button deleteAppointmentButton;
 
     public void initialize() throws SQLException {
         System.out.println("Main form initialized.");
@@ -64,5 +79,43 @@ public class MainForm
         appointmentCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("CustomerID"));
         appointmentUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("UserID"));
         appointmentContactIDColumn.setCellValueFactory(new PropertyValueFactory<>("ContactID"));
+    }
+
+    public void onAddCustomer(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customer_form.fxml")));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Add Customer");
+        stage.setScene(new Scene(root, 959,626));
+        stage.show();
+    }
+
+    public void onUpdateCustomer(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customer_form.fxml")));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Update Customer");
+        stage.setScene(new Scene(root, 959,626));
+        stage.show();
+    }
+
+    public void onDeleteCustomer(ActionEvent actionEvent) {
+    }
+
+    public void onAddAppointment(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appointment_form.fxml")));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Add Appointment");
+        stage.setScene(new Scene(root, 959,626));
+        stage.show();
+    }
+
+    public void onUpdateAppointment(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appointment_form.fxml")));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Update Appointment");
+        stage.setScene(new Scene(root, 959,626));
+        stage.show();
+    }
+
+    public void onDeleteAppointment(ActionEvent actionEvent) {
     }
 }

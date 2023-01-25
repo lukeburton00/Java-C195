@@ -14,10 +14,8 @@ public abstract class CustomerQuery
     {
         try
         {
-            // The SQL Statement to execute
-            String sqlStatement = "SELECT * FROM customers";
+            String sqlStatement = "SELECT * FROM customers;";
 
-            // Prepare the SQL Statement for setting variables
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
 
             ResultSet results = preparedStatement.executeQuery();
@@ -44,5 +42,14 @@ public abstract class CustomerQuery
             System.out.println(errorMessage);
             return null;
         }
+    }
+
+    public static int deleteCustomer(Customer customer) throws SQLException {
+        String sqlStatement = "DELETE FROM customers WHERE Customer_ID = ?";
+
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+        preparedStatement.setString(1, Integer.toString(customer.getID()));
+
+        return preparedStatement.executeUpdate();
     }
 }
