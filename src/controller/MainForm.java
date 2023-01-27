@@ -50,6 +50,7 @@ public class MainForm
     public Button addAppointmentButton;
     public Button updateAppointmentButton;
     public Button deleteAppointmentButton;
+    public Button logOutButton;
 
     public void initialize() throws SQLException {
         System.out.println("Main form initialized.");
@@ -85,7 +86,7 @@ public class MainForm
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customer_form.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Add Customer");
-        stage.setScene(new Scene(root, 959,626));
+        stage.setScene(new Scene(root, 600,400));
         stage.show();
     }
 
@@ -93,7 +94,7 @@ public class MainForm
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customer_form.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Update Customer");
-        stage.setScene(new Scene(root, 959,626));
+        stage.setScene(new Scene(root, 600,400));
         stage.show();
     }
 
@@ -117,5 +118,13 @@ public class MainForm
     }
 
     public void onDeleteAppointment(ActionEvent actionEvent) {
+    }
+
+    public void onLogOut(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/log_in_form.fxml")));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Log In");
+        stage.setScene(new Scene(root, 600,400));
+        stage.show();
     }
 }

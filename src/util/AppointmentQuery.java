@@ -3,6 +3,7 @@ package util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
+import model.Customer;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -12,8 +13,7 @@ import java.time.LocalDateTime;
 
 public abstract class AppointmentQuery
 {
-    public static ObservableList<Appointment> getAllAppointments() throws SQLException
-    {
+    public static ObservableList<Appointment> getAllAppointments() {
         try
         {
             // The SQL Statement to execute
@@ -32,8 +32,8 @@ public abstract class AppointmentQuery
                 String description = results.getString("Description");
                 String location = results.getString("Location");
                 String type = results.getString("Type");
-                Date start = results.getDate("Start");
-                Date end = results.getDate("End");
+                LocalDateTime start = results.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime end = results.getTimestamp("End").toLocalDateTime();
                 int customer_id = results.getInt("Customer_ID");
                 int user_id = results.getInt("User_ID");
                 int contact_id = results.getInt("Contact_ID");
@@ -50,5 +50,14 @@ public abstract class AppointmentQuery
             System.out.println(errorMessage);
             return null;
         }
+    }
+
+    public static int deleteAppointment(Appointment appointment) throws SQLException {
+        String sqlStatement = "DELETE FROM appointments WHERE Appointment_ID = ?";
+
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+        preparedStatement.setString(1, Integer.toString(appointment.getID()));
+
+        return preparedStatement.executeUpdate();
     }
 }

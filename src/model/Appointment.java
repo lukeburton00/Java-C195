@@ -1,14 +1,15 @@
 package model;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class Appointment
 {
     private int mID, mCustomerID, mUserID, mContactID;
     private String mTitle, mDescription, mLocation, mType;
-    private Date mStart, mEnd;
+    private LocalDateTime mStart, mEnd;
 
-    public Appointment(int id, String title, String description, String location, String type, Date start, Date end, int customer_id, int user_id, int contact_id)
+    public Appointment(int id, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customer_id, int user_id, int contact_id)
     {
         mID = id;
         mTitle = title;
@@ -72,17 +73,17 @@ public class Appointment
 
     public void setType(String type) { mType = type; }
 
-    public Date getStart()
+    public LocalDateTime getStart()
     {
         return mStart;
     }
 
-    public void setStart(Date start) { mStart = start; }
+    public void setStart(LocalDateTime start) { mStart = start; }
 
-    public Date getEnd()
+    public LocalDateTime getEnd()
     {
         return mEnd;
     }
 
-    public void setEnd(Date end) { mEnd = end; }
+    public void setEnd(LocalDateTime end) { mEnd = end; }
 }
