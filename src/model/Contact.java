@@ -4,7 +4,7 @@ public class Contact {
     public int mID;
     public String mName, mEmail;
 
-    Contact(int id, String name, String email)
+    public Contact(int id, String name, String email)
     {
         mID = id;
         mName = name;

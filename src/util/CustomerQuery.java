@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public abstract class CustomerQuery
 {
-    public static ObservableList<Customer> getAllCustomers() throws SQLException
+    public static ObservableList<Customer> getAllCustomers()
     {
         try
         {
@@ -44,12 +44,23 @@ public abstract class CustomerQuery
         }
     }
 
-    public static int deleteCustomer(Customer customer) throws SQLException {
-        String sqlStatement = "DELETE FROM customers WHERE Customer_ID = ?";
+    public static int deleteCustomer(Customer customer)
+    {
+        try
+        {
+            String sqlStatement = "DELETE FROM customers WHERE Customer_ID = ?";
 
-        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
-        preparedStatement.setString(1, Integer.toString(customer.getID()));
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, Integer.toString(customer.getID()));
 
-        return preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate();
+        }
+
+        catch (SQLException e)
+        {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return 0;
+        }
     }
 }

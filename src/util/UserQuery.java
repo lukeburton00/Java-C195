@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public abstract class UserQuery {
 
-    public static boolean authenticate(String userName, String password) throws SQLException
+    public static boolean authenticate(String userName, String password)
     {
         try
         {

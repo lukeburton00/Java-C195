@@ -18,21 +18,22 @@ public class CustomerForm {
     public Button cancelButton;
     public Button saveButton;
     public TextField idField;
-    public TextField descriptionField;
-    public TextField locationField;
-    public TextField typeField;
-    public TextField titleField;
     public TextField nameField;
     public ComboBox<Country> divisionComboBox;
     public TextField addressField;
     public TextField postalField;
     public TextField phoneField;
 
+    public void initialize()
+    {
+        System.out.println("Customer form initialized.");
+    }
+
     public void onCancel(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/main_form.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customers.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Customers");
-        stage.setScene(new Scene(root, 959, 626));
+        stage.setScene(new Scene(root, 959,461));
         stage.show();
     }
 

@@ -12,26 +12,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
-import model.Customer;
 import util.AppointmentQuery;
-import util.CustomerQuery;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Objects;
 
-public class MainForm
+public class Appointments
 {
-    public ObservableList<Customer> customers;
-    public TableView<Customer> customersTable;
-    public TableColumn<Customer, Integer> customerIDColumn;
-    public TableColumn<Customer, String> customerNameColumn;
-    public TableColumn<Customer, String> customerAddressColumn;
-    public TableColumn<Customer, String> customerPostalColumn;
-    public TableColumn<Customer, String> customerPhoneColumn;
-    public TableColumn<Customer, Integer> customerDivisionColumn;
-
     public ObservableList<Appointment> appointments;
     public TableView<Appointment> appointmentsTable;
     public TableColumn<Appointment, Integer> appointmentIDColumn;
@@ -44,27 +33,14 @@ public class MainForm
     public TableColumn<Appointment, Integer> appointmentCustomerIDColumn;
     public TableColumn<Appointment, Integer> appointmentUserIDColumn;
     public TableColumn<Appointment, Integer> appointmentContactIDColumn;
-    public Button addCustomerButton;
-    public Button updateCustomerButton;
-    public Button deleteCustomerButton;
     public Button addAppointmentButton;
     public Button updateAppointmentButton;
     public Button deleteAppointmentButton;
     public Button logOutButton;
+    public Button viewCustomersButton;
 
     public void initialize() throws SQLException {
-        System.out.println("Main form initialized.");
-
-        customers = CustomerQuery.getAllCustomers();
-
-        customersTable.setItems(customers);
-
-        customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
-        customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("Address"));
-        customerPostalColumn.setCellValueFactory(new PropertyValueFactory<>("PostalCode"));
-        customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("Phone"));
-        customerDivisionColumn.setCellValueFactory(new PropertyValueFactory<>("DivisionID"));
+        System.out.println("Appointment view initialized.");
 
         appointments = AppointmentQuery.getAllAppointments();
 
@@ -82,24 +58,6 @@ public class MainForm
         appointmentContactIDColumn.setCellValueFactory(new PropertyValueFactory<>("ContactID"));
     }
 
-    public void onAddCustomer(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customer_form.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("Add Customer");
-        stage.setScene(new Scene(root, 600,400));
-        stage.show();
-    }
-
-    public void onUpdateCustomer(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customer_form.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("Update Customer");
-        stage.setScene(new Scene(root, 600,400));
-        stage.show();
-    }
-
-    public void onDeleteCustomer(ActionEvent actionEvent) {
-    }
 
     public void onAddAppointment(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appointment_form.fxml")));
@@ -125,6 +83,14 @@ public class MainForm
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Log In");
         stage.setScene(new Scene(root, 600,400));
+        stage.show();
+    }
+
+    public void onViewCustomers(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customers.fxml")));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Customers");
+        stage.setScene(new Scene(root, 959,461));
         stage.show();
     }
 }
