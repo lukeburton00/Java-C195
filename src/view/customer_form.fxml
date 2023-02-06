@@ -3,23 +3,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerForm">
-   <Button fx:id="cancelButton" layoutX="14.0" layoutY="349.0" mnemonicParsing="false" onAction="#onCancel"
-           text="Cancel"/>
-   <Button fx:id="saveButton" layoutX="534.0" layoutY="349.0" mnemonicParsing="false" onAction="#onSave" text="Save"/>
-   <Label layoutX="124.0" layoutY="56.0" text="Customer ID: "/>
-   <Label layoutX="124.0" layoutY="192.0" text="Address:"/>
-   <Label layoutX="126.0" layoutY="98.0" text="Division: "/>
-   <Label layoutX="124.0" layoutY="146.0" text="Name: "/>
-   <Label layoutX="126.0" layoutY="235.0" text="Postal Code: "/>
-   <Label layoutX="128.0" layoutY="274.0" text="Phone Number:"/>
-   <ComboBox fx:id="divisionComboBox" layoutX="316.0" layoutY="94.0" prefHeight="25.0" prefWidth="90.0"
-             promptText="Country"/>
-   <TextField fx:id="idField" disable="true" layoutX="317.0" layoutY="52.0" text="Auto Generated"/>
-   <TextField fx:id="nameField" layoutX="317.0" layoutY="142.0"/>
-   <TextField fx:id="addressField" layoutX="317.0" layoutY="188.0"/>
-   <TextField fx:id="postalField" layoutX="317.0" layoutY="231.0"/>
-   <TextField fx:id="phoneField" layoutX="317.0" layoutY="270.0"/>
-   <ComboBox layoutX="415.0" layoutY="94.0" prefHeight="25.0" prefWidth="84.0" promptText="Division"/>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerForm">
+   <Button fx:id="cancelButton" layoutX="14.0" layoutY="349.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
+   <Button fx:id="saveButton" layoutX="534.0" layoutY="349.0" mnemonicParsing="false" onAction="#onSave" text="Save" />
+   <Label layoutX="124.0" layoutY="56.0" text="Customer ID: " />
+   <Label layoutX="124.0" layoutY="192.0" text="Address:" />
+   <Label layoutX="126.0" layoutY="98.0" text="Division: " />
+   <Label layoutX="124.0" layoutY="146.0" text="Name: " />
+   <Label layoutX="126.0" layoutY="235.0" text="Postal Code: " />
+   <Label layoutX="128.0" layoutY="274.0" text="Phone Number:" />
+   <ComboBox fx:id="countryComboBox" layoutX="316.0" layoutY="94.0" prefHeight="25.0" prefWidth="90.0" promptText="Country" />
+   <TextField fx:id="idField" disable="true" layoutX="317.0" layoutY="52.0" text="Auto Generated" />
+   <TextField fx:id="nameField" layoutX="317.0" layoutY="142.0" />
+   <TextField fx:id="addressField" layoutX="317.0" layoutY="188.0" />
+   <TextField fx:id="postalField" layoutX="317.0" layoutY="231.0" />
+   <TextField fx:id="phoneField" layoutX="317.0" layoutY="270.0" />
+   <ComboBox fx:id="divisionComboBox" layoutX="415.0" layoutY="94.0" prefHeight="25.0" prefWidth="84.0" promptText="Division" />
 </AnchorPane>

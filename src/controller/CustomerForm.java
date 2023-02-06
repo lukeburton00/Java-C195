@@ -10,6 +10,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Country;
+import model.FirstLevelDivision;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -20,6 +21,7 @@ public class CustomerForm {
     public TextField idField;
     public TextField nameField;
     public ComboBox<Country> divisionComboBox;
+    public ComboBox<FirstLevelDivision> countryComboBox;
     public TextField addressField;
     public TextField postalField;
     public TextField phoneField;

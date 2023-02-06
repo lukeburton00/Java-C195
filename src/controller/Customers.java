@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -13,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Customer;
 import util.CustomerQuery;
+import util.FlashMessage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -34,6 +36,9 @@ public class Customers
     public Button deleteCustomerButton;
     public Button backButton;
 
+    public static Customer selectedCustomer;
+    public static Boolean updatingCustomer;
+
     public void initialize() throws SQLException {
         System.out.println("Customer view initialized.");
 
@@ -50,6 +55,7 @@ public class Customers
     }
 
     public void onAddCustomer(ActionEvent actionEvent) throws IOException {
+        updatingCustomer = false;
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customer_form.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Add Customer");
@@ -58,6 +64,19 @@ public class Customers
     }
 
     public void onUpdateCustomer(ActionEvent actionEvent) throws IOException {
+        updatingCustomer = true;
+        selectedCustomer =  customersTable.getSelectionModel().getSelectedItem();
+
+        if (selectedCustomer == null)
+        {
+            String title = "Error";
+            String header = "No customer selected.";
+            String content = "A customer must be selected in order to be updated.";
+            FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+            message.display();
+            return;
+        }
+
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customer_form.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Update Customer");
@@ -66,6 +85,19 @@ public class Customers
     }
 
     public void onDeleteCustomer(ActionEvent actionEvent) {
+        selectedCustomer =  customersTable.getSelectionModel().getSelectedItem();
+
+        if (selectedCustomer == null)
+        {
+            String title = "Error";
+            String header = "No customer selected.";
+            String content = "A customer must be selected in order to be deleted.";
+            FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+            message.display();
+            return;
+        }
+
+        CustomerQuery.deleteCustomer(selectedCustomer);
     }
 
     public void onBack(ActionEvent actionEvent) throws IOException {

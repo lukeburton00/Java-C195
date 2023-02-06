@@ -11,10 +11,12 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.w3c.dom.Text;
 import util.FlashMessage;
+import util.Time;
 import util.UserQuery;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
@@ -52,6 +54,8 @@ public class LogInForm {
             locationMarkerLabel.setText("Location: ");
             signInButton.setText("Sign In");
         }
+
+        System.out.println(Time.systemToUTC(LocalDateTime.now()));
     }
 
     public void onSignIn(ActionEvent actionEvent) throws IOException, SQLException {

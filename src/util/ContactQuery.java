@@ -42,4 +42,47 @@ public abstract class ContactQuery
             return null;
         }
     }
+
+    public static int getContactIDFromName(String name)
+    {
+        try
+        {
+            String sqlStatement = "SELECT Contact_ID FROM contacts WHERE Contact_Name = ?";
+
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, name);
+
+            ResultSet results = preparedStatement.executeQuery();
+            results.next();
+            return results.getInt("Contact_ID");
+        }
+        catch (SQLException e)
+        {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return 0;
+        }
+    }
+
+    public static String getContactNameFromID(int id)
+    {
+        try
+        {
+            String sqlStatement = "SELECT Contact_Name FROM contacts WHERE Contact_ID = ?";
+
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1, id);
+
+            ResultSet results = preparedStatement.executeQuery();
+            results.next();
+            return results.getString("Contact_Name");
+        }
+
+        catch (SQLException e)
+        {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return "Null";
+        }
+    }
 }

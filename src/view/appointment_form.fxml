@@ -26,4 +26,6 @@
    <ComboBox fx:id="endTimeBox" layoutX="583.0" layoutY="94.0" prefWidth="150.0" />
    <TextField fx:id="customerIDField" layoutX="403.0" layoutY="142.0" />
    <ComboBox fx:id="contactBox" layoutX="403.0" layoutY="188.0" prefWidth="150.0" />
+   <Label layoutX="320.0" layoutY="235.0" text="User ID:" />
+   <TextField fx:id="userIDField" layoutX="403.0" layoutY="231.0" />
 </AnchorPane>
