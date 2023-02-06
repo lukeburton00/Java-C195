@@ -103,12 +103,10 @@ public class AppointmentForm {
         startTimeBox.setItems(timeSlots);
         endTimeBox.setItems(timeSlots);
 
-        if(!Appointments.updatingAppointment)
-        {
+        if(!Appointments.updatingAppointment) {
             idField.setText(String.valueOf(id + 1));
             return;
         }
-
         Appointment appointment = Appointments.selectedAppointment;
 
         idField.setText(String.valueOf(appointment.getID()));
@@ -185,6 +183,9 @@ public class AppointmentForm {
         LocalDateTime start = Time.systemToUTC(startDatePicker.getValue().atTime(LocalTime.parse(startTimeBox.getValue())));
         LocalDateTime end = Time.systemToUTC(endDatePicker.getValue().atTime(LocalTime.parse(endTimeBox.getValue())));
 
+        System.out.println(start);
+        System.out.println(end);
+
         Appointment appointment = new Appointment(ID, title, description, location, type, start, end, customerID, userID, contactID);
 
         if (Appointments.updatingAppointment)
@@ -192,12 +193,37 @@ public class AppointmentForm {
             AppointmentQuery.deleteAppointment(Appointments.selectedAppointment);
         }
 
+        if (!validateDates(start, end))
+        {
+           return;
+        }
+
         AppointmentQuery.addAppointment(appointment);
+
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appointments.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Appointments");
         stage.setScene(new Scene(root, 959,491));
         stage.show();
+    }
+
+    private boolean validateDates(LocalDateTime start, LocalDateTime end)
+    {
+        FlashMessage message;
+        String title;
+        String header;
+        String content;
+
+        if (start.isAfter(end))
+        {
+            title = "Error";
+            header = "Appointment time error:";
+            content = "Appointment start time must be before end time.";
+            message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+            message.display();
+            return false;
+        }
+        return true;
     }
 }

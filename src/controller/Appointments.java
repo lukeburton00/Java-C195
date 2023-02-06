@@ -50,14 +50,14 @@ public class Appointments
 
         appointments = AppointmentQuery.getAllAppointments();
 
-        for (Appointment appointment : appointments)
-        {
-            LocalDateTime UTCStart = appointment.getStart();
-            LocalDateTime UTCEnd = appointment.getEnd();
-
-            appointment.setStart(Time.UTCToSystem(UTCStart));
-            appointment.setEnd(Time.UTCToSystem(UTCEnd));
-        }
+//        for (Appointment appointment : appointments)
+//        {
+//            LocalDateTime UTCStart = appointment.getStart();
+//            LocalDateTime UTCEnd = appointment.getEnd();
+//
+//            appointment.setStart(Time.UTCToSystem(UTCStart));
+//            appointment.setEnd(Time.UTCToSystem(UTCEnd));
+//        }
 
         appointmentsTable.setItems(appointments);
 
