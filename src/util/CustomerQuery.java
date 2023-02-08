@@ -63,4 +63,25 @@ public abstract class CustomerQuery
             return 0;
         }
     }
+
+    public static int getCurrentMaxID()
+    {
+        try
+        {
+            String sqlStatement = "select Customer_ID from Customers ORDER BY Customer_ID desc LIMIT 1;";
+
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+
+            ResultSet results =  preparedStatement.executeQuery();
+            results.next();
+            return results.getInt("Customer_ID");
+        }
+
+        catch (SQLException e)
+        {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return 0;
+        }
+    }
 }

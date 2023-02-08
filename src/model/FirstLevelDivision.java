@@ -1,10 +1,10 @@
 package model;
 
 public class FirstLevelDivision {
-    public int mID, mCountryID;
-    public String mDivision;
+    private int mID, mCountryID;
+    private String mDivision;
 
-    FirstLevelDivision(int id, int countryID, String division)
+    public FirstLevelDivision(int id, int countryID, String division)
     {
         mID = id;
         mCountryID = countryID;

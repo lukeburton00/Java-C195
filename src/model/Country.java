@@ -1,10 +1,10 @@
 package model;
 
 public class Country {
-    public int mID;
-    public String mCountry;
+    private int mID;
+    private String mCountry;
 
-    Country(int id, String country)
+    public Country(int id, String country)
     {
         mID = id;
         mCountry = country;

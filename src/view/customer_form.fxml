@@ -12,7 +12,7 @@
    <Label layoutX="124.0" layoutY="146.0" text="Name: " />
    <Label layoutX="126.0" layoutY="235.0" text="Postal Code: " />
    <Label layoutX="128.0" layoutY="274.0" text="Phone Number:" />
-   <ComboBox fx:id="countryComboBox" layoutX="316.0" layoutY="94.0" prefHeight="25.0" prefWidth="90.0" promptText="Country" />
+   <ComboBox fx:id="countryComboBox" layoutX="316.0" layoutY="94.0" prefHeight="25.0" prefWidth="90.0" onAction="#onSelectCountry" promptText="Country" />
    <TextField fx:id="idField" disable="true" layoutX="317.0" layoutY="52.0" text="Auto Generated" />
    <TextField fx:id="nameField" layoutX="317.0" layoutY="142.0" />
    <TextField fx:id="addressField" layoutX="317.0" layoutY="188.0" />

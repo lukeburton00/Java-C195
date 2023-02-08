@@ -17,7 +17,6 @@ import util.FlashMessage;
 import util.Time;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -43,7 +42,6 @@ public class AppointmentForm {
     public TextField customerIDField;
     public ComboBox<String> contactBox;
     public TextField userIDField;
-    public static int appointmentID;
 
     public void initialize()
     {
@@ -66,8 +64,6 @@ public class AppointmentForm {
         comboBoxes.add(endTimeBox);
         comboBoxes.add(contactBox);
 
-        int id = AppointmentQuery.getCurrentMaxID();
-        System.out.println(id);
 
         try
         {
@@ -104,7 +100,7 @@ public class AppointmentForm {
         endTimeBox.setItems(timeSlots);
 
         if(!Appointments.updatingAppointment) {
-            idField.setText(String.valueOf(id + 1));
+            idField.setText(String.valueOf(AppointmentQuery.getCurrentMaxID() + 1));
             return;
         }
         Appointment appointment = Appointments.selectedAppointment;
