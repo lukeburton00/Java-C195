@@ -7,16 +7,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Country;
 import model.Customer;
 import model.FirstLevelDivision;
-import util.CountryQuery;
-import util.CustomerQuery;
-import util.DivisionQuery;
+import util.*;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -31,10 +27,23 @@ public class CustomerForm {
     public TextField addressField;
     public TextField postalField;
     public TextField phoneField;
+    public ObservableList<ComboBox<String>> comboBoxes;
+    public ObservableList<TextField> textFields;
 
     public void initialize()
     {
         System.out.println("Customer form initialized.");
+
+        textFields = FXCollections.observableArrayList();
+        comboBoxes = FXCollections.observableArrayList();
+
+        textFields.add(idField);
+        textFields.add(nameField);
+        textFields.add(addressField);
+        textFields.add(postalField);
+        textFields.add(phoneField);
+        comboBoxes.add(countryComboBox);
+        comboBoxes.add(divisionComboBox);
 
         ObservableList<Country> countries = CountryQuery.getAllCountries();
         ObservableList<String> countryNames = FXCollections.observableArrayList();
@@ -63,6 +72,9 @@ public class CustomerForm {
         addressField.setText(customer.getAddress());
         postalField.setText(customer.getPostalCode());
         phoneField.setText(customer.getPhone());
+        countryComboBox.setValue(CountryQuery.getCountryFromDivisionID(customer.getDivisionID()).getCountry());
+        divisionComboBox.setValue(DivisionQuery.getDivisionFromID(customer.getDivisionID()).getDivision());
+        onSelectCountry();
     }
 
     public void onCancel(ActionEvent actionEvent) throws IOException {
@@ -73,13 +85,60 @@ public class CustomerForm {
         stage.show();
     }
 
-    public void onSave(ActionEvent actionEvent) {
+    public void onSave(ActionEvent actionEvent) throws IOException {
+        for (TextField field : textFields)
+        {
+            if (field.getText().isEmpty())
+            {
+                String title = "Error";
+                String header = "Field " + field.getId() + " is empty.";
+                String content = "All fields are required.";
+                FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+                message.display();
+                return;
+            }
+        }
+
+        for (ComboBox<String> box : comboBoxes)
+        {
+            if (box.getValue() == null)
+            {
+                String title = "Error";
+                String header = "Field " + box.getId() + " is empty.";
+                String content = "All fields are required.";
+                FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+                message.display();
+                return;
+            }
+        }
+
+        int id = Integer.parseInt(idField.getText());
+        String name = nameField.getText();
+        String address = addressField.getText();
+        String postal = postalField.getText();
+        String phone = phoneField.getText();
+        int divisionID = DivisionQuery.getDivisionFromName(divisionComboBox.getValue()).getID();
+
+
+
+        if (Customers.updatingCustomer)
+        {
+            CustomerQuery.deleteCustomer(Customers.selectedCustomer);
+        }
+
+        Customer customer = new Customer(id, divisionID, name, address, postal, phone);
+        CustomerQuery.addCustomer(customer);
+
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customers.fxml")));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Customers");
+        stage.setScene(new Scene(root, 959,461));
+        stage.show();
+
     }
 
-    public void onSelectCountry(ActionEvent actionEvent) {
-        String countryName = countryComboBox.getSelectionModel().getSelectedItem();
-
-
+    public void onSelectCountry() {
+        String countryName = countryComboBox.getValue();
         ObservableList<String> divisionNames = FXCollections.observableArrayList();
 
         for (FirstLevelDivision division : DivisionQuery.getAllDivisionsForCountry(CountryQuery.getCountryFromName(countryName)))

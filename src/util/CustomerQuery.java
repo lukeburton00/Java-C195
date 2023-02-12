@@ -2,6 +2,7 @@ package util;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.Appointment;
 import model.Customer;
 
 import java.sql.PreparedStatement;
@@ -10,6 +11,33 @@ import java.sql.SQLException;
 
 public abstract class CustomerQuery
 {
+
+    public static int addCustomer(Customer customer)
+    {
+        try
+        {
+            String sqlStatement = "INSERT INTO Customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
+                    "VALUES (?, ?, ?, ?, ?, ?);";
+
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, Integer.toString(customer.getID()));
+            preparedStatement.setString(2, customer.getName());
+            preparedStatement.setString(3, customer.getAddress());
+            preparedStatement.setString(4, customer.getPostalCode());
+            preparedStatement.setString(5, customer.getPhone());
+            preparedStatement.setInt(6, customer.getDivisionID());
+
+            System.out.println("Customer successfully added.");
+            return preparedStatement.executeUpdate();
+        }
+
+        catch (SQLException e)
+        {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return 0;
+        }
+    }
     public static ObservableList<Customer> getAllCustomers()
     {
         try

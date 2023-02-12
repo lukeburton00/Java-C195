@@ -48,30 +48,7 @@ public class Appointments
     public void initialize() throws SQLException {
         System.out.println("Appointment view initialized.");
 
-        appointments = AppointmentQuery.getAllAppointments();
-
-//        for (Appointment appointment : appointments)
-//        {
-//            LocalDateTime UTCStart = appointment.getStart();
-//            LocalDateTime UTCEnd = appointment.getEnd();
-//
-//            appointment.setStart(Time.UTCToSystem(UTCStart));
-//            appointment.setEnd(Time.UTCToSystem(UTCEnd));
-//        }
-
-        appointmentsTable.setItems(appointments);
-
-        appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        appointmentTitleColumn.setCellValueFactory(new PropertyValueFactory<>("Title"));
-        appointmentDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("Description"));
-        appointmentLocationColumn.setCellValueFactory(new PropertyValueFactory<>("Location"));
-        appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("Type"));
-        appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("Start"));
-        appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("End"));
-        appointmentCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("CustomerID"));
-        appointmentUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("UserID"));
-        appointmentContactIDColumn.setCellValueFactory(new PropertyValueFactory<>("ContactID"));
-
+        updateAppointmentsView();
 
     }
 
@@ -108,18 +85,29 @@ public class Appointments
 
     public void onDeleteAppointment(ActionEvent actionEvent) {
         selectedAppointment = appointmentsTable.getSelectionModel().getSelectedItem();
+        String title;
+        String header;
+        String content;
 
         if (selectedAppointment == null)
         {
-            String title = "Error";
-            String header = "No appointment selected.";
-            String content = "An appointment must be selected in order to be deleted.";
+            title = "Error";
+            header = "No appointment selected.";
+            content = "An appointment must be selected in order to be deleted.";
             FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
             message.display();
             return;
         }
 
+
         AppointmentQuery.deleteAppointment(selectedAppointment);
+        updateAppointmentsView();
+
+        title = "Delete confirmed.";
+        header = "Appointment " + selectedAppointment.getID() + " was deleted.";
+        content = "Appointment type was " + selectedAppointment.getType() + ".";
+        FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+        message.display();
     }
 
     public void onLogOut(ActionEvent actionEvent) throws IOException {
@@ -136,5 +124,33 @@ public class Appointments
         stage.setTitle("Customers");
         stage.setScene(new Scene(root, 959,461));
         stage.show();
+    }
+
+    public void updateAppointmentsView()
+    {
+
+        appointments = AppointmentQuery.getAllAppointments();
+
+        for (Appointment appointment : appointments)
+        {
+            LocalDateTime UTCStart = appointment.getStart();
+            LocalDateTime UTCEnd = appointment.getEnd();
+
+            appointment.setStart(Time.UTCToSystem(UTCStart));
+            appointment.setEnd(Time.UTCToSystem(UTCEnd));
+        }
+
+        appointmentsTable.setItems(appointments);
+
+        appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        appointmentTitleColumn.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        appointmentDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("Description"));
+        appointmentLocationColumn.setCellValueFactory(new PropertyValueFactory<>("Location"));
+        appointmentTypeColumn.setCellValueFactory(new PropertyValueFactory<>("Type"));
+        appointmentStartColumn.setCellValueFactory(new PropertyValueFactory<>("Start"));
+        appointmentEndColumn.setCellValueFactory(new PropertyValueFactory<>("End"));
+        appointmentCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("CustomerID"));
+        appointmentUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("UserID"));
+        appointmentContactIDColumn.setCellValueFactory(new PropertyValueFactory<>("ContactID"));
     }
 }

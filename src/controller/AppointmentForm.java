@@ -19,6 +19,9 @@ import util.Time;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.util.Comparator;
+import java.util.Locale;
 import java.util.Objects;
 
 public class AppointmentForm {
@@ -84,8 +87,8 @@ public class AppointmentForm {
             System.out.println(e.getMessage());
         }
 
-        LocalTime firstTimeSlot = LocalTime.parse("08:00");
-        LocalTime lastTimeSlot = LocalTime.parse("22:00");
+        LocalTime firstTimeSlot = LocalTime.parse("00:00");
+        LocalTime lastTimeSlot = LocalTime.parse("23:00");
 
         timeSlots = FXCollections.observableArrayList();
         do
@@ -178,24 +181,22 @@ public class AppointmentForm {
         String type = typeField.getText();
         LocalDateTime start = Time.systemToUTC(startDatePicker.getValue().atTime(LocalTime.parse(startTimeBox.getValue())));
         LocalDateTime end = Time.systemToUTC(endDatePicker.getValue().atTime(LocalTime.parse(endTimeBox.getValue())));
+        Appointment appointment = new Appointment(ID, title, description, location, type, start, end, customerID, userID, contactID);
 
         System.out.println(start);
         System.out.println(end);
 
-        Appointment appointment = new Appointment(ID, title, description, location, type, start, end, customerID, userID, contactID);
+        if (!validateDates(start, end, ID))
+        {
+           return;
+        }
 
         if (Appointments.updatingAppointment)
         {
             AppointmentQuery.deleteAppointment(Appointments.selectedAppointment);
         }
 
-        if (!validateDates(start, end))
-        {
-           return;
-        }
-
         AppointmentQuery.addAppointment(appointment);
-
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appointments.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -204,22 +205,85 @@ public class AppointmentForm {
         stage.show();
     }
 
-    private boolean validateDates(LocalDateTime start, LocalDateTime end)
+    private boolean validateDates(LocalDateTime start, LocalDateTime end, int appointmentID)
     {
         FlashMessage message;
-        String title;
-        String header;
+        String title = "Error";
+        String header = "Appointment time error: ";
         String content;
+        LocalDateTime startEST = Time.UTCtoEST(start);
+        LocalDateTime endEST = Time.UTCtoEST(end);
 
-        if (start.isAfter(end))
+        LocalDateTime now = LocalDateTime.now();
+
+        LocalTime startESTHourMinutes = startEST.toLocalTime();
+        LocalTime endESTHourMinutes = endEST.toLocalTime();
+
+        LocalTime ESTBusinessHoursStart = LocalTime.parse("08:00");
+        LocalTime ESTBusinessHoursEnd = LocalTime.parse("22:00");
+
+        if (start.isAfter(end) || start.isEqual(end))
         {
-            title = "Error";
-            header = "Appointment time error:";
             content = "Appointment start time must be before end time.";
             message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
             message.display();
             return false;
         }
+
+        if (startEST.isBefore(now) || endEST.isBefore(now))
+        {
+            content = "Appointment must be scheduled for the future.";
+            message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+            message.display();
+            return false;
+        }
+
+        for (Appointment appointment : AppointmentQuery.getAllAppointments())
+        {
+            LocalDateTime appStart = appointment.getStart();
+            LocalDateTime appEnd = appointment.getEnd();
+            boolean isCurrentAppointment = appointmentID == appointment.getID();
+
+            boolean isStartOverlapping = (start.isAfter(appStart) || start.isEqual(appStart)) && (start.isBefore(appEnd) || start.isEqual(appEnd));
+            boolean isEndOverlapping = (end.isAfter(appStart) || end.isEqual(appStart)) && (end.isBefore(appEnd) || end.isEqual(appEnd));
+            boolean hasAppointmentInside = (appStart.isAfter(start) && appEnd.isBefore(end));
+
+
+            boolean isWithinBusinessHours = (startESTHourMinutes.isAfter(ESTBusinessHoursStart.minusMinutes(1)) && (endESTHourMinutes.isBefore(ESTBusinessHoursEnd.plusMinutes(1))));
+
+            if (!isCurrentAppointment && isStartOverlapping)
+            {
+                content = "Appointment start falls within an existing appointment time.";
+                message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+                message.display();
+                return false;
+            }
+
+            if (!isCurrentAppointment && isEndOverlapping)
+            {
+                content = "Appointment end falls within an existing appointment time.";
+                message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+                message.display();
+                return false;
+            }
+
+            if (!isCurrentAppointment && hasAppointmentInside)
+            {
+                content = "An existing appointment falls within this one.";
+                message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+                message.display();
+                return false;
+            }
+
+            if(!isWithinBusinessHours)
+            {
+                content = "Appointment time does not fall within business hours (8:00am to 10:00pm EST)";
+                message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+                message.display();
+                return false;
+            }
+        }
+
         return true;
     }
 }

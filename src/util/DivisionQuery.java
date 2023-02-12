@@ -41,4 +41,52 @@ public abstract class DivisionQuery {
             return null;
         }
     }
+
+    public static FirstLevelDivision getDivisionFromID(int division) {
+        try {
+            String sqlStatement = "SELECT * FROM first_level_divisions WHERE Division_ID = ?";
+
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1, division);
+            FirstLevelDivision result = null;
+
+            ResultSet results = preparedStatement.executeQuery();
+            while (results.next()) {
+                int id = results.getInt("Division_ID");
+                String name = results.getString("Division");
+                int countryId = results.getInt("Country_ID");
+
+                result = new FirstLevelDivision(id, countryId, name);
+            }
+            return result;
+        } catch (SQLException e) {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
+    public static FirstLevelDivision getDivisionFromName(String division) {
+        try {
+            String sqlStatement = "SELECT * FROM first_level_divisions WHERE Division = ?";
+
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, division);
+            FirstLevelDivision result = null;
+
+            ResultSet results = preparedStatement.executeQuery();
+            while (results.next()) {
+                int id = results.getInt("Division_ID");
+                String name = results.getString("Division");
+                int countryId = results.getInt("Country_ID");
+
+                result = new FirstLevelDivision(id, countryId, name);
+            }
+            return result;
+        } catch (SQLException e) {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
 }

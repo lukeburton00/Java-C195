@@ -12,7 +12,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Appointment;
 import model.Customer;
+import util.AppointmentQuery;
 import util.CustomerQuery;
 import util.FlashMessage;
 
@@ -41,17 +43,7 @@ public class Customers
 
     public void initialize() throws SQLException {
         System.out.println("Customer view initialized.");
-
-        customers = CustomerQuery.getAllCustomers();
-
-        customersTable.setItems(customers);
-
-        customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
-        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
-        customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("Address"));
-        customerPostalColumn.setCellValueFactory(new PropertyValueFactory<>("PostalCode"));
-        customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("Phone"));
-        customerDivisionColumn.setCellValueFactory(new PropertyValueFactory<>("DivisionID"));
+        updateCustomersView();
     }
 
     public void onAddCustomer(ActionEvent actionEvent) throws IOException {
@@ -87,17 +79,37 @@ public class Customers
     public void onDeleteCustomer(ActionEvent actionEvent) {
         selectedCustomer =  customersTable.getSelectionModel().getSelectedItem();
 
+        String title = "Confirmation";
+        String header = "Are you sure you would like to delete this customer?";
+        String content = "All appointments associated with this customer will be deleted.";
+
+        FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.CONFIRMATION);
+
+
         if (selectedCustomer == null)
         {
-            String title = "Error";
-            String header = "No customer selected.";
-            String content = "A customer must be selected in order to be deleted.";
-            FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+            title = "Error";
+            header = "No customer selected.";
+            content = "A customer must be selected in order to be deleted.";
+            message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
             message.display();
             return;
         }
 
-        CustomerQuery.deleteCustomer(selectedCustomer);
+        if (message.confirm())
+        {
+            ObservableList<Appointment> associatedAppointments = AppointmentQuery.getAllAppointmentsForCustomer(selectedCustomer);
+
+            if (associatedAppointments != null)
+            {
+                for (Appointment appointment : associatedAppointments)
+                {
+                    AppointmentQuery.deleteAppointment(appointment);
+                }
+                CustomerQuery.deleteCustomer(selectedCustomer);
+            }
+        }
+        updateCustomersView();
     }
 
     public void onBack(ActionEvent actionEvent) throws IOException {
@@ -106,5 +118,19 @@ public class Customers
         stage.setTitle("Appointments");
         stage.setScene(new Scene(root, 959,491));
         stage.show();
+    }
+
+    public void updateCustomersView()
+    {
+        customers = CustomerQuery.getAllCustomers();
+
+        customersTable.setItems(customers);
+
+        customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("Address"));
+        customerPostalColumn.setCellValueFactory(new PropertyValueFactory<>("PostalCode"));
+        customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("Phone"));
+        customerDivisionColumn.setCellValueFactory(new PropertyValueFactory<>("DivisionID"));
     }
 }
