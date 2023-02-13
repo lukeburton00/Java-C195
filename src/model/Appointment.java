@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Appointment
 {
@@ -85,4 +86,29 @@ public class Appointment
     }
 
     public void setEnd(LocalDateTime end) { mEnd = end; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Appointment that = (Appointment) o;
+        System.out.println(this.getID() + " , " + that.getID());
+        System.out.println(this.getTitle() + " , " + that.getTitle());
+        System.out.println(this.getDescription() + " , " + that.getDescription());
+        System.out.println(this.getType() + " , " + that.getType());
+        System.out.println(this.getLocation() + " , " + that.getLocation());
+        System.out.println(this.getContactID() + " , " + that.getContactID());
+        System.out.println(this.getUserID() + " , " + that.getUserID());
+        System.out.println(this.getUserID() + " , " + that.getUserID());
+        System.out.println(this.getStart() + " , " + that.getStart());
+        System.out.println(this.getEnd() + " , " + that.getEnd());
+
+
+        return this.getID() == that.getID() && this.getCustomerID() == that.getCustomerID() && this.getUserID() == that.getUserID() && this.getContactID() == that.getContactID() && this.getTitle().equals(that.getTitle()) && this.getDescription().equals(that.getDescription()) && this.getLocation().equals(that.getLocation()) && this.getType().equals(that.getType()) && this.getStart().equals(that.getStart()) && this.getEnd().equals(that.getEnd());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mID, mCustomerID, mUserID, mContactID, mTitle, mDescription, mLocation, mType, mStart, mEnd);
+    }
 }

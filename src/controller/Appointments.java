@@ -43,13 +43,19 @@ public class Appointments
     public Button viewCustomersButton;
 
     public static Appointment selectedAppointment;
-    public static Boolean updatingAppointment;
+    public static boolean updatingAppointment;
+    public static boolean checkedForAppointment;
 
     public void initialize() throws SQLException {
         System.out.println("Appointment view initialized.");
 
         updateAppointmentsView();
 
+        if(!checkedForAppointment)
+        {
+            checkForUpcomingAppointment();
+            checkedForAppointment = true;
+        }
     }
 
 
@@ -111,6 +117,7 @@ public class Appointments
     }
 
     public void onLogOut(ActionEvent actionEvent) throws IOException {
+        checkedForAppointment = false;
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/log_in_form.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Log In");
@@ -126,7 +133,7 @@ public class Appointments
         stage.show();
     }
 
-    public void updateAppointmentsView()
+    private void updateAppointmentsView()
     {
 
         appointments = AppointmentQuery.getAllAppointments();
@@ -152,5 +159,35 @@ public class Appointments
         appointmentCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("CustomerID"));
         appointmentUserIDColumn.setCellValueFactory(new PropertyValueFactory<>("UserID"));
         appointmentContactIDColumn.setCellValueFactory(new PropertyValueFactory<>("ContactID"));
+    }
+
+    private void checkForUpcomingAppointment()
+    {
+
+        String title;
+        String header;
+        String content;
+        for (Appointment appointment : appointments)
+        {
+            LocalDateTime start = appointment.getStart();
+            LocalDateTime now = LocalDateTime.now();
+            boolean isWithin15Minutes = start.isAfter(now) && (now.plusMinutes(15).isEqual(start) || now.plusMinutes(15).isAfter(start));
+
+            if (isWithin15Minutes)
+            {
+                title = "Alert!";
+                header = "You have an upcoming appointment.";
+                content = "Appointment " + appointment.getID() + " starts at " + appointment.getStart() + ".";
+                FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.WARNING);
+                message.display();
+                return;
+            }
+        }
+
+        title = "Information:";
+        header = "You have no upcoming appointments";
+        content = "";
+        FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.INFORMATION);
+        message.display();
     }
 }

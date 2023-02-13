@@ -20,9 +20,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.chrono.ChronoLocalDateTime;
-import java.util.Comparator;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class AppointmentForm {
     public ObservableList<String> timeSlots;
@@ -186,6 +184,8 @@ public class AppointmentForm {
         System.out.println(start);
         System.out.println(end);
 
+
+
         if (!validateDates(start, end, ID))
         {
            return;
@@ -193,6 +193,27 @@ public class AppointmentForm {
 
         if (Appointments.updatingAppointment)
         {
+            // Because the selection model grabs data directly from the view where times are in
+            // the system time zone, we must convert those values to UTC in order to be compared with our
+            // newly created appointment object.
+            LocalDateTime adjustedStart = Time.systemToUTC(Appointments.selectedAppointment.getStart());
+            LocalDateTime adjustedEnd = Time.systemToUTC(Appointments.selectedAppointment.getEnd());
+
+            Appointments.selectedAppointment.setStart(adjustedStart);
+            Appointments.selectedAppointment.setEnd(adjustedEnd);
+
+            // Appointment::equals has been overridden to compare all fields of two appointments
+            if (appointment.equals(Appointments.selectedAppointment))
+            {
+                // This variable named messageTitle to resolve earlier appointment field named title
+                String messageTitle = "Alert: ";
+                String header = "No change";
+                String content = "No fields in this appointment were changed.";
+                FlashMessage message = new FlashMessage(messageTitle, header, content, Alert.AlertType.INFORMATION);
+                message.display();
+                return;
+            }
+
             AppointmentQuery.deleteAppointment(Appointments.selectedAppointment);
         }
 
