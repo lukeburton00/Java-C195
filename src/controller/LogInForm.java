@@ -12,7 +12,6 @@ import util.Time;
 import util.UserQuery;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Locale;
@@ -55,9 +54,8 @@ public class LogInForm {
         System.out.println(Time.systemToUTC(LocalDateTime.now()));
     }
 
-    public void onSignIn(ActionEvent actionEvent) throws IOException, SQLException {
-        System.out.println("Sign in button pressed.");
-
+    public void onSignIn(ActionEvent actionEvent) throws IOException
+    {
         if (UserQuery.authenticate(userNameField.getText(), passwordField.getText())) {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appointments.fxml")));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

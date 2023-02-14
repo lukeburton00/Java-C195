@@ -175,8 +175,8 @@ public class Appointments
 
             if (isWithin15Minutes)
             {
-                title = "Alert!";
-                header = "You have an upcoming appointment.";
+                title = "Alert: ";
+                header = "User " + appointment.getUserID() + " has an upcoming appointment.";
                 content = "Appointment " + appointment.getID() + " starts at " + appointment.getStart() + ".";
                 FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.WARNING);
                 message.display();

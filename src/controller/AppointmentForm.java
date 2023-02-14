@@ -19,8 +19,7 @@ import util.Time;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.chrono.ChronoLocalDateTime;
-import java.util.*;
+import java.util.Objects;
 
 public class AppointmentForm {
     public ObservableList<String> timeSlots;
@@ -180,11 +179,6 @@ public class AppointmentForm {
         LocalDateTime start = Time.systemToUTC(startDatePicker.getValue().atTime(LocalTime.parse(startTimeBox.getValue())));
         LocalDateTime end = Time.systemToUTC(endDatePicker.getValue().atTime(LocalTime.parse(endTimeBox.getValue())));
         Appointment appointment = new Appointment(ID, title, description, location, type, start, end, customerID, userID, contactID);
-
-        System.out.println(start);
-        System.out.println(end);
-
-
 
         if (!validateDates(start, end, ID))
         {
