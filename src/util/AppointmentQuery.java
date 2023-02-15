@@ -5,10 +5,14 @@ import javafx.collections.ObservableList;
 import model.Appointment;
 import model.Customer;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 
 public abstract class AppointmentQuery
 {
@@ -135,6 +139,92 @@ public abstract class AppointmentQuery
             // Prepare the SQL Statement for setting variables
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, Integer.toString(customer.getID()));
+
+            ResultSet results = preparedStatement.executeQuery();
+            ObservableList<Appointment> resultAppointments = FXCollections.observableArrayList();
+
+            while (results.next())
+            {
+                int id = results.getInt("Appointment_ID");
+                String title = results.getString("Title");
+                String description = results.getString("Description");
+                String location = results.getString("Location");
+                String type = results.getString("Type");
+                LocalDateTime start = Time.systemToUTC(results.getTimestamp("Start").toLocalDateTime());
+                LocalDateTime end = Time.systemToUTC(results.getTimestamp("End").toLocalDateTime());
+                int customer_id = results.getInt("Customer_ID");
+                int user_id = results.getInt("User_ID");
+                int contact_id = results.getInt("Contact_ID");
+
+                Appointment appointment = new Appointment(id, title, description, location, type, start, end, customer_id, user_id, contact_id);
+                resultAppointments.add(appointment);
+            }
+            return resultAppointments;
+        }
+
+        catch(SQLException e)
+        {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
+    public static ObservableList<Appointment> getAllAppointmentsForThisWeek()
+    {
+        try
+        {
+            // The SQL Statement to execute
+            String sqlStatement = "select * from appointments where start between curdate() and date_add(curdate(), interval 1 week);";
+
+            // Prepare the SQL Statement for setting variables
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+
+            ResultSet results = preparedStatement.executeQuery();
+            ObservableList<Appointment> resultAppointments = FXCollections.observableArrayList();
+
+            while (results.next())
+            {
+                int id = results.getInt("Appointment_ID");
+                String title = results.getString("Title");
+                String description = results.getString("Description");
+                String location = results.getString("Location");
+                String type = results.getString("Type");
+                LocalDateTime start = Time.systemToUTC(results.getTimestamp("Start").toLocalDateTime());
+                LocalDateTime end = Time.systemToUTC(results.getTimestamp("End").toLocalDateTime());
+                int customer_id = results.getInt("Customer_ID");
+                int user_id = results.getInt("User_ID");
+                int contact_id = results.getInt("Contact_ID");
+
+                Appointment appointment = new Appointment(id, title, description, location, type, start, end, customer_id, user_id, contact_id);
+                resultAppointments.add(appointment);
+            }
+            return resultAppointments;
+        }
+
+        catch(SQLException e)
+        {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
+    public static ObservableList<Appointment> getAllAppointmentsForMonth(String month)
+    {
+        System.out.println("This was called.");
+        DateTimeFormatter parser = DateTimeFormatter.ofPattern("MMM");
+        TemporalAccessor accessor = parser.parse(month);
+        int monthAsInt = accessor.get(ChronoField.MONTH_OF_YEAR);
+
+        try
+        {
+            // The SQL Statement to execute
+            String sqlStatement = "select * from appointments where month(start) = ?;";
+
+            // Prepare the SQL Statement for setting variables
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1, monthAsInt);
 
             ResultSet results = preparedStatement.executeQuery();
             ObservableList<Appointment> resultAppointments = FXCollections.observableArrayList();

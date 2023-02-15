@@ -1,15 +1,13 @@
 package controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
@@ -18,13 +16,12 @@ import util.FlashMessage;
 import util.Time;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Appointments
 {
-    public ObservableList<Appointment> appointments;
+
     public TableView<Appointment> appointmentsTable;
     public TableColumn<Appointment, Integer> appointmentIDColumn;
     public TableColumn<Appointment, String> appointmentTitleColumn;
@@ -41,14 +38,24 @@ public class Appointments
     public Button deleteAppointmentButton;
     public Button logOutButton;
     public Button viewCustomersButton;
+    public Button viewReportsButton;
+    public Button clearFilterButton;
+    public RadioButton weekRadioButton;
+    public RadioButton monthRadioButton;
+    public ToggleGroup filterGroup;
+    public ComboBox<String> monthBox;
 
+    public static ObservableList<Appointment> appointments;
     public static Appointment selectedAppointment;
     public static boolean updatingAppointment;
     public static boolean checkedForAppointment;
 
-    public void initialize() throws SQLException {
+
+
+    public void initialize() {
         System.out.println("Appointment view initialized.");
 
+        appointments = AppointmentQuery.getAllAppointments();
         updateAppointmentsView();
 
         if(!checkedForAppointment)
@@ -56,6 +63,11 @@ public class Appointments
             checkForUpcomingAppointment();
             checkedForAppointment = true;
         }
+
+        filterGroup = new ToggleGroup();
+        weekRadioButton.setToggleGroup(filterGroup);
+        monthRadioButton.setToggleGroup(filterGroup);
+
     }
 
 
@@ -107,6 +119,8 @@ public class Appointments
 
 
         AppointmentQuery.deleteAppointment(selectedAppointment);
+
+        appointments = AppointmentQuery.getAllAppointments();
         updateAppointmentsView();
 
         title = "Delete confirmed.";
@@ -135,9 +149,6 @@ public class Appointments
 
     private void updateAppointmentsView()
     {
-
-        appointments = AppointmentQuery.getAllAppointments();
-
         for (Appointment appointment : appointments)
         {
             LocalDateTime UTCStart = appointment.getStart();
@@ -189,5 +200,54 @@ public class Appointments
         content = "";
         FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.INFORMATION);
         message.display();
+    }
+
+    public void onViewReports(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/reports.fxml")));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Reports");
+        stage.setScene(new Scene(root, 959,461));
+        stage.show();
+    }
+
+    public void onSelectWeekRadio(ActionEvent actionEvent) {
+        appointments = AppointmentQuery.getAllAppointmentsForThisWeek();
+        updateAppointmentsView();
+        monthBox.setVisible(false);
+        monthBox.setValue(null);
+        monthBox.setDisable(true);
+    }
+
+    public void onSelectMonthRadio(ActionEvent actionEvent) {
+        ObservableList<String> months = FXCollections.observableArrayList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+        monthBox.setItems(months);
+        monthBox.setVisible(true);
+        monthBox.setDisable(false);
+        monthBox.setValue(null);
+    }
+
+    public void onClearFilter(ActionEvent actionEvent) {
+        filterGroup.selectToggle(null);
+
+        appointments = AppointmentQuery.getAllAppointments();
+        updateAppointmentsView();
+
+        monthBox.setDisable(true);
+        monthBox.setVisible(false);
+        monthBox.setValue(null);
+    }
+
+    public void onSelectMonthBox(ActionEvent actionEvent) {
+        String month = monthBox.getValue();
+        System.out.println(month);
+
+        if (monthBox.getValue() == null)
+        {
+            System.out.println("No month value was selected. Skipping query.");
+            return;
+        }
+        appointments = AppointmentQuery.getAllAppointmentsForMonth(month);
+        updateAppointmentsView();
+
     }
 }
