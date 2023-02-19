@@ -11,7 +11,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
+import model.Contact;
 import util.AppointmentQuery;
+import util.ContactQuery;
 import util.FlashMessage;
 import util.Time;
 
@@ -49,7 +51,11 @@ public class Appointments
     public static Appointment selectedAppointment;
     public static boolean updatingAppointment;
     public static boolean checkedForAppointment;
-
+    public ComboBox<String> appointmentReportBox;
+    public ComboBox<String> monthReportBox;
+    public Button viewTypeMonthReportButton;
+    public ComboBox<String> contactReportBox;
+    public Button viewContactReportButton;
 
 
     public void initialize() {
@@ -67,6 +73,19 @@ public class Appointments
         filterGroup = new ToggleGroup();
         weekRadioButton.setToggleGroup(filterGroup);
         monthRadioButton.setToggleGroup(filterGroup);
+        setMonthBoxes();
+
+        ObservableList<String> types = AppointmentQuery.getAllAppointmentTypes();
+        appointmentReportBox.setItems(types);
+
+        ObservableList<Contact> contacts = ContactQuery.getAllContacts();
+        ObservableList<String> contactNames = FXCollections.observableArrayList();
+        String name;
+        for (Contact contact : contacts) {
+            name = contact.getName();
+            contactNames.add(name);
+        }
+        contactReportBox.setItems(contactNames);
 
     }
 
@@ -202,14 +221,6 @@ public class Appointments
         message.display();
     }
 
-    public void onViewReports(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/reports.fxml")));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("Reports");
-        stage.setScene(new Scene(root, 959,461));
-        stage.show();
-    }
-
     public void onSelectWeekRadio(ActionEvent actionEvent) {
         appointments = AppointmentQuery.getAllAppointmentsForThisWeek();
         updateAppointmentsView();
@@ -219,8 +230,7 @@ public class Appointments
     }
 
     public void onSelectMonthRadio(ActionEvent actionEvent) {
-        ObservableList<String> months = FXCollections.observableArrayList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
-        monthBox.setItems(months);
+
         monthBox.setVisible(true);
         monthBox.setDisable(false);
         monthBox.setValue(null);
@@ -249,5 +259,70 @@ public class Appointments
         appointments = AppointmentQuery.getAllAppointmentsForMonth(month);
         updateAppointmentsView();
 
+    }
+
+    public void onViewTypeMonthReport(ActionEvent actionEvent)
+    {
+        String type = appointmentReportBox.getValue();
+        String month = monthReportBox.getValue();
+
+        String title;
+        String header;
+        String content;
+
+        if (type == null || month == null)
+        {
+            title = "Error";
+            header = "Value not selected:";
+            content = "To view this report, you must select both Type and Month above.";
+            FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+            message.display();
+            return;
+        }
+        appointments = AppointmentQuery.getAllAppointmentsForTypeAndMonth(type, month);
+        updateAppointmentsView();
+
+        title = "Report";
+        header = "Total appointments for selected Type and Month: " +  appointments.size();
+        content = "See table for information on reported appointments.";
+        FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.INFORMATION);
+        message.display();
+
+    }
+
+    public void onViewContactReport(ActionEvent actionEvent)
+    {
+        String contactName = contactReportBox.getValue();
+
+        String title;
+        String header;
+        String content;
+
+        if (contactName == null)
+        {
+            title = "Error";
+            header = "Value not selected:";
+            content = "To view this report, you must select a Contact above.";
+            FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+            message.display();
+            return;
+        }
+
+        int contactID = ContactQuery.getContactIDFromName(contactName);
+        appointments = AppointmentQuery.getAllAppointmentsForContactID(contactID);
+        updateAppointmentsView();
+
+        title = "Report";
+        header = "Total appointments for selected Contact: " +  appointments.size();
+        content = "See table for information on reported appointments.";
+        FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.INFORMATION);
+        message.display();
+    }
+
+    public void setMonthBoxes()
+    {
+        ObservableList<String> months = FXCollections.observableArrayList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+        monthBox.setItems(months);
+        monthReportBox.setItems(months);
     }
 }

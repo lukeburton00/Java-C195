@@ -212,7 +212,6 @@ public abstract class AppointmentQuery
 
     public static ObservableList<Appointment> getAllAppointmentsForMonth(String month)
     {
-        System.out.println("This was called.");
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("MMM");
         TemporalAccessor accessor = parser.parse(month);
         int monthAsInt = accessor.get(ChronoField.MONTH_OF_YEAR);
@@ -246,6 +245,123 @@ public abstract class AppointmentQuery
                 resultAppointments.add(appointment);
             }
             return resultAppointments;
+        }
+
+        catch(SQLException e)
+        {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
+    public static ObservableList<Appointment> getAllAppointmentsForTypeAndMonth(String type, String month)
+    {
+        DateTimeFormatter parser = DateTimeFormatter.ofPattern("MMM");
+        TemporalAccessor accessor = parser.parse(month);
+        int monthAsInt = accessor.get(ChronoField.MONTH_OF_YEAR);
+
+        try
+        {
+            // The SQL Statement to execute
+            String sqlStatement = "select * from appointments where month(start) = ? and type = ?;";
+
+            // Prepare the SQL Statement for setting variables
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1, monthAsInt);
+            preparedStatement.setString(2, type);
+
+            ResultSet results = preparedStatement.executeQuery();
+            ObservableList<Appointment> resultAppointments = FXCollections.observableArrayList();
+
+            while (results.next())
+            {
+                int id = results.getInt("Appointment_ID");
+                String title = results.getString("Title");
+                String description = results.getString("Description");
+                String location = results.getString("Location");
+                String appType = results.getString("Type");
+                LocalDateTime start = Time.systemToUTC(results.getTimestamp("Start").toLocalDateTime());
+                LocalDateTime end = Time.systemToUTC(results.getTimestamp("End").toLocalDateTime());
+                int customer_id = results.getInt("Customer_ID");
+                int user_id = results.getInt("User_ID");
+                int contact_id = results.getInt("Contact_ID");
+
+                Appointment appointment = new Appointment(id, title, description, location, appType, start, end, customer_id, user_id, contact_id);
+                resultAppointments.add(appointment);
+            }
+            return resultAppointments;
+        }
+
+        catch(SQLException e)
+        {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
+    public static ObservableList<Appointment> getAllAppointmentsForContactID(int id)
+    {
+
+        try
+        {
+            // The SQL Statement to execute
+            String sqlStatement = "select * from appointments where Contact_ID = ?";
+
+            // Prepare the SQL Statement for setting variables
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+            preparedStatement.setInt(1, id);
+
+            ResultSet results = preparedStatement.executeQuery();
+            ObservableList<Appointment> resultAppointments = FXCollections.observableArrayList();
+
+            while (results.next())
+            {
+                int appID = results.getInt("Appointment_ID");
+                String title = results.getString("Title");
+                String description = results.getString("Description");
+                String location = results.getString("Location");
+                String appType = results.getString("Type");
+                LocalDateTime start = Time.systemToUTC(results.getTimestamp("Start").toLocalDateTime());
+                LocalDateTime end = Time.systemToUTC(results.getTimestamp("End").toLocalDateTime());
+                int customer_id = results.getInt("Customer_ID");
+                int user_id = results.getInt("User_ID");
+                int contact_id = results.getInt("Contact_ID");
+
+                Appointment appointment = new Appointment(appID, title, description, location, appType, start, end, customer_id, user_id, contact_id);
+                resultAppointments.add(appointment);
+            }
+            return resultAppointments;
+        }
+
+        catch(SQLException e)
+        {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
+    public static ObservableList<String> getAllAppointmentTypes()
+    {
+        try
+        {
+            // The SQL Statement to execute
+            String sqlStatement = "select Type from appointments;";
+
+            // Prepare the SQL Statement for setting variables
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+
+            ResultSet results = preparedStatement.executeQuery();
+            ObservableList<String> resultTypes = FXCollections.observableArrayList();
+
+            while (results.next())
+            {
+                String type = results.getString("Type");
+                resultTypes.add(type);
+            }
+            return resultTypes;
         }
 
         catch(SQLException e)

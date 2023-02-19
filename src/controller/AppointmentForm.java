@@ -64,25 +64,16 @@ public class AppointmentForm {
         comboBoxes.add(endTimeBox);
         comboBoxes.add(contactBox);
 
+        System.out.println("Appointment form initialized.");
 
-        try
-        {
-            System.out.println("Appointment form initialized.");
-
-            contacts = ContactQuery.getAllContacts();
-            contactNames = FXCollections.observableArrayList();
-            String name;
-            for (Contact contact : contacts) {
-                name = contact.getName();
-                contactNames.add(name);
-            }
-            contactBox.setItems(contactNames);
-
+        contacts = ContactQuery.getAllContacts();
+        contactNames = FXCollections.observableArrayList();
+        String name;
+        for (Contact contact : contacts) {
+            name = contact.getName();
+            contactNames.add(name);
         }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
+        contactBox.setItems(contactNames);
 
         LocalTime firstTimeSlot = LocalTime.parse("00:00");
         LocalTime lastTimeSlot = LocalTime.parse("23:00");
