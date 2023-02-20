@@ -57,6 +57,9 @@ public class Appointments
     public ComboBox<String> countryReportBox;
     public Button viewCountryReportButton;
 
+    public static ObservableList<Customer> reportCustomers;
+    public static boolean viewingCustomerReport;
+
 
     public void initialize() {
         System.out.println("Appointment view initialized.");
@@ -96,7 +99,8 @@ public class Appointments
 
         countryReportBox.setItems(countryNames);
 
-
+        viewingCustomerReport = false;
+        reportCustomers = FXCollections.observableArrayList();
     }
 
 
@@ -355,12 +359,12 @@ public class Appointments
 
         int countryID = CountryQuery.getCountryFromName(countryName).getID();
         ObservableList<Customer> customers = CustomerQuery.getAllCustomersForCountry(countryID);
-        Customers.reportCustomers = customers;
 
         if (customers != null)
         {
+            viewingCustomerReport = true;
+            reportCustomers = customers;
             onViewCustomers(actionEvent);
-
             title = "Report";
             header = "Total customers for  " +  countryName + ": " + customers.size();
             content = "All customers for " + countryName + " are displayed in the table.";

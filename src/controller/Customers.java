@@ -40,14 +40,12 @@ public class Customers
 
     public static Customer selectedCustomer;
     public static boolean updatingCustomer;
-    public static ObservableList<Customer> reportCustomers;
-
     public void initialize() throws SQLException {
         System.out.println("Customer view initialized.");
 
-        if (reportCustomers.size() > 0)
+        if (Appointments.viewingCustomerReport)
         {
-            customers = reportCustomers;
+            customers = Appointments.reportCustomers;
         }
 
         else

@@ -115,7 +115,7 @@ public class AppointmentForm {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appointments.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Appointments");
-        stage.setScene(new Scene(root, 959,491));
+        stage.setScene(new Scene(root, 959, 710));
         stage.show();
     }
 
@@ -207,7 +207,7 @@ public class AppointmentForm {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appointments.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setTitle("Appointments");
-        stage.setScene(new Scene(root, 959,491));
+        stage.setScene(new Scene(root, 959, 710));
         stage.show();
     }
 
