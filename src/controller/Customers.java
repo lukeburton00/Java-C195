@@ -24,7 +24,7 @@ import java.util.Objects;
 
 public class Customers
 {
-    public ObservableList<Customer> customers;
+    public static ObservableList<Customer> customers;
     public TableView<Customer> customersTable;
     public TableColumn<Customer, Integer> customerIDColumn;
     public TableColumn<Customer, String> customerNameColumn;
@@ -39,10 +39,22 @@ public class Customers
     public Button backButton;
 
     public static Customer selectedCustomer;
-    public static Boolean updatingCustomer;
+    public static boolean updatingCustomer;
+    public static ObservableList<Customer> reportCustomers;
 
     public void initialize() throws SQLException {
         System.out.println("Customer view initialized.");
+
+        if (reportCustomers.size() > 0)
+        {
+            customers = reportCustomers;
+        }
+
+        else
+        {
+            customers = CustomerQuery.getAllCustomers();
+        }
+
         updateCustomersView();
     }
 
@@ -109,6 +121,7 @@ public class Customers
                 CustomerQuery.deleteCustomer(selectedCustomer);
             }
         }
+        customers = CustomerQuery.getAllCustomers();
         updateCustomersView();
     }
 
@@ -122,10 +135,7 @@ public class Customers
 
     public void updateCustomersView()
     {
-        customers = CustomerQuery.getAllCustomers();
-
         customersTable.setItems(customers);
-
         customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("ID"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("Name"));
         customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("Address"));

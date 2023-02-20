@@ -12,10 +12,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.Contact;
-import util.AppointmentQuery;
-import util.ContactQuery;
-import util.FlashMessage;
-import util.Time;
+import model.Country;
+import model.Customer;
+import util.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -40,7 +39,6 @@ public class Appointments
     public Button deleteAppointmentButton;
     public Button logOutButton;
     public Button viewCustomersButton;
-    public Button viewReportsButton;
     public Button clearFilterButton;
     public RadioButton weekRadioButton;
     public RadioButton monthRadioButton;
@@ -56,6 +54,8 @@ public class Appointments
     public Button viewTypeMonthReportButton;
     public ComboBox<String> contactReportBox;
     public Button viewContactReportButton;
+    public ComboBox<String> countryReportBox;
+    public Button viewCountryReportButton;
 
 
     public void initialize() {
@@ -86,6 +86,16 @@ public class Appointments
             contactNames.add(name);
         }
         contactReportBox.setItems(contactNames);
+
+        ObservableList<Country> countries = CountryQuery.getAllCountries();
+        ObservableList<String> countryNames = FXCollections.observableArrayList();
+        for (Country country : countries) {
+            name = country.getCountry();
+            countryNames.add(name);
+        }
+
+        countryReportBox.setItems(countryNames);
+
 
     }
 
@@ -314,7 +324,7 @@ public class Appointments
 
         title = "Report";
         header = "Total appointments for selected Contact: " +  appointments.size();
-        content = "See table for information on reported appointments.";
+        content = "The schedule for this contact is displayed in the table.";
         FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.INFORMATION);
         message.display();
     }
@@ -324,5 +334,49 @@ public class Appointments
         ObservableList<String> months = FXCollections.observableArrayList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
         monthBox.setItems(months);
         monthReportBox.setItems(months);
+    }
+
+    public void onViewCountryReport(ActionEvent actionEvent) throws IOException {
+        String countryName = countryReportBox.getValue();
+
+        String title;
+        String header;
+        String content;
+
+        if (countryName == null)
+        {
+            title = "Error";
+            header = "Value not selected:";
+            content = "To view this report, you must select a Country above.";
+            FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
+            message.display();
+            return;
+        }
+
+        int countryID = CountryQuery.getCountryFromName(countryName).getID();
+        ObservableList<Customer> customers = CustomerQuery.getAllCustomersForCountry(countryID);
+        Customers.reportCustomers = customers;
+
+        if (customers != null)
+        {
+            onViewCustomers(actionEvent);
+
+            title = "Report";
+            header = "Total customers for  " +  countryName + ": " + customers.size();
+            content = "All customers for " + countryName + " are displayed in the table.";
+            FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.INFORMATION);
+            message.display();
+        }
+
+        else
+        {
+            title = "Report";
+            header = "There are no registered customers from + " + countryName + ".";
+            content = "";
+            FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.INFORMATION);
+            message.display();
+        }
+
+
     }
 }

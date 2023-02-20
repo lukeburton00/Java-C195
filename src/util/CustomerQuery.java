@@ -72,6 +72,44 @@ public abstract class CustomerQuery
         }
     }
 
+    public static ObservableList<Customer> getAllCustomersForCountry(int countryID)
+    {
+        try
+        {
+            String sqlStatement = "select customers.* from customers\n" +
+                    "inner join first_level_divisions \n" +
+                    "on first_level_divisions.Division_ID = customers.Division_ID\n" +
+                    "where first_level_divisions.Country_ID = ?;";
+
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
+            preparedStatement.setString(1, Integer.toString(countryID));
+
+            ResultSet results = preparedStatement.executeQuery();
+            ObservableList<Customer> resultCustomers = FXCollections.observableArrayList();
+
+            while (results.next())
+            {
+                int id = results.getInt("Customer_ID");
+                String name = results.getString("Customer_Name");
+                String address = results.getString("Address");
+                String postal = results.getString("Postal_Code");
+                String phone = results.getString("Phone");
+                int divisionID = results.getInt("Division_ID");
+
+                Customer customer = new Customer(id, divisionID, name, address, postal, phone);
+                resultCustomers.add(customer);
+            }
+            return resultCustomers;
+        }
+
+        catch(SQLException e)
+        {
+            String errorMessage = e.getMessage();
+            System.out.println(errorMessage);
+            return null;
+        }
+    }
+
     public static int deleteCustomer(Customer customer)
     {
         try

@@ -37,4 +37,7 @@
    <Label layoutX="369.0" layoutY="511.0" text="Appointment Schedule by Contact" />
    <ComboBox fx:id="contactReportBox" layoutX="385.0" layoutY="548.0" prefWidth="150.0" promptText="Select Contact" />
    <Button fx:id="viewContactReportButton" layoutX="420.0" layoutY="587.0" mnemonicParsing="false" onAction="#onViewContactReport" text="View Report" />
+   <Label layoutX="782.0" layoutY="511.0" text="Total Customers by Country" />
+   <ComboBox fx:id="countryReportBox" layoutX="776.0" layoutY="548.0" prefWidth="150.0" promptText="Select Country" />
+   <Button fx:id="viewCountryReportButton" layoutX="844.0" layoutY="587.0" mnemonicParsing="false" onAction="#onViewCountryReport" text="View Report" />
 </AnchorPane>
