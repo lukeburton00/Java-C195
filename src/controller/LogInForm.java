@@ -11,6 +11,7 @@ import util.FlashMessage;
 import util.Time;
 import util.UserQuery;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -57,6 +58,21 @@ public class LogInForm {
     public void onSignIn(ActionEvent actionEvent) throws IOException
     {
         if (UserQuery.authenticate(userNameField.getText(), passwordField.getText())) {
+            try {
+                System.out.println("Attempting to write to file...\n");
+                FileWriter writer = new FileWriter("login_activity.txt", true);
+                writer.write("Log-in attempt SUCCESS: " + LocalDateTime.now() + " Local Time.\n");
+                writer.close();
+            }
+
+            catch (IOException e)
+            {
+                System.out.println("File write error occurred: ");
+                e.printStackTrace();
+            }
+
+
+
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appointments.fxml")));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("Appointments");
@@ -82,6 +98,18 @@ public class LogInForm {
             System.out.println("User not found.");
             FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
             message.display();
+
+            try {
+                FileWriter writer = new FileWriter("login_activity.txt", true);
+                writer.write("Log-in attempt FAILED: " + LocalDateTime.now() + " Local Time.\n");
+                writer.close();
+            }
+
+            catch (IOException e)
+            {
+                System.out.println("File write error occurred: ");
+                e.printStackTrace();
+            }
         }
     }
 }
