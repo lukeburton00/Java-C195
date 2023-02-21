@@ -93,7 +93,16 @@ public class Appointment
         if (o == null || getClass() != o.getClass()) return false;
         Appointment that = (Appointment) o;
 
-        return this.getID() == that.getID() && this.getCustomerID() == that.getCustomerID() && this.getUserID() == that.getUserID() && this.getContactID() == that.getContactID() && this.getTitle().equals(that.getTitle()) && this.getDescription().equals(that.getDescription()) && this.getLocation().equals(that.getLocation()) && this.getType().equals(that.getType()) && this.getStart().equals(that.getStart()) && this.getEnd().equals(that.getEnd());
+        return this.getID() == that.getID()
+                && this.getCustomerID() == that.getCustomerID()
+                && this.getUserID() == that.getUserID()
+                && this.getContactID() == that.getContactID()
+                && this.getTitle().equals(that.getTitle())
+                && this.getDescription().equals(that.getDescription())
+                && this.getLocation().equals(that.getLocation())
+                && this.getType().equals(that.getType())
+                && this.getStart().equals(that.getStart())
+                && this.getEnd().equals(that.getEnd());
     }
 
     @Override

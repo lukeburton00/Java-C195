@@ -83,20 +83,14 @@ public class Appointments
 
         ObservableList<Contact> contacts = ContactQuery.getAllContacts();
         ObservableList<String> contactNames = FXCollections.observableArrayList();
-        String name;
-        for (Contact contact : contacts) {
-            name = contact.getName();
-            contactNames.add(name);
-        }
-        contactReportBox.setItems(contactNames);
 
         ObservableList<Country> countries = CountryQuery.getAllCountries();
         ObservableList<String> countryNames = FXCollections.observableArrayList();
-        for (Country country : countries) {
-            name = country.getCountry();
-            countryNames.add(name);
-        }
+        
+        contacts.forEach(contact -> contactNames.add(contact.getName()));
+        countries.forEach(country -> countryNames.add(country.getCountry()));
 
+        contactReportBox.setItems(contactNames);
         countryReportBox.setItems(countryNames);
 
         viewingCustomerReport = false;

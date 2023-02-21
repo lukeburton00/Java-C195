@@ -19,4 +19,5 @@
     <Button fx:id="updateCustomerButton" layoutX="422.0" layoutY="325.0" mnemonicParsing="false" onAction="#onUpdateCustomer" text="Update Customer" />
     <Button fx:id="deleteCustomerButton" layoutX="640.0" layoutY="325.0" mnemonicParsing="false" onAction="#onDeleteCustomer" text="Delete Customer" />
     <Button fx:id="backButton" layoutX="457.0" layoutY="393.0" mnemonicParsing="false" onAction="#onBack" text="Back" />
+   <Button fx:id="clearReportButton" layoutX="737.0" layoutY="61.0" mnemonicParsing="false" onAction="#onClearReport" text="Clear Report" />
 </AnchorPane>

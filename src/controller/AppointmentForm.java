@@ -11,10 +11,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.Contact;
-import util.AppointmentQuery;
-import util.ContactQuery;
-import util.FlashMessage;
-import util.Time;
+import util.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -68,11 +65,8 @@ public class AppointmentForm {
 
         contacts = ContactQuery.getAllContacts();
         contactNames = FXCollections.observableArrayList();
-        String name;
-        for (Contact contact : contacts) {
-            name = contact.getName();
-            contactNames.add(name);
-        }
+
+        contacts.forEach(contact -> {contactNames.add(contact.getName()); });
         contactBox.setItems(contactNames);
 
         LocalTime firstTimeSlot = LocalTime.parse("00:00");
@@ -120,21 +114,20 @@ public class AppointmentForm {
     }
 
     public void onSave(ActionEvent actionEvent) throws IOException {
-        for (TextField field : textFields)
-        {
-            if (field.getText().isEmpty())
+
+        textFields.forEach(textField ->  {
+            if (textField.getText().isEmpty())
             {
                 String title = "Error";
-                String header = "Field " + field.getId() + " is empty.";
+                String header = "Field " + textField.getId() + " is empty.";
                 String content = "All fields are required.";
                 FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.ERROR);
                 message.display();
                 return;
             }
-        }
+        });
 
-        for (DatePicker picker : datePickers)
-        {
+        datePickers.forEach(picker -> {
             if (picker.getValue() == null)
             {
                 String title = "Error";
@@ -144,10 +137,9 @@ public class AppointmentForm {
                 message.display();
                 return;
             }
-        }
+        });
 
-        for (ComboBox<String> box : comboBoxes)
-        {
+        comboBoxes.forEach(box -> {
             if (box.getValue() == null)
             {
                 String title = "Error";
@@ -157,7 +149,7 @@ public class AppointmentForm {
                 message.display();
                 return;
             }
-        }
+        });
 
         int ID = Integer.parseInt(idField.getText());
         int customerID = Integer.parseInt(customerIDField.getText());
@@ -187,8 +179,7 @@ public class AppointmentForm {
             Appointments.selectedAppointment.setStart(adjustedStart);
             Appointments.selectedAppointment.setEnd(adjustedEnd);
 
-            // Appointment::equals has been overridden to compare all fields of two appointments
-            if (appointment.equals(Appointments.selectedAppointment))
+            if (appointmentComparator().appointmentsAreEqual(appointment, Appointments.selectedAppointment))
             {
                 // This variable named messageTitle to resolve earlier appointment field named title
                 String messageTitle = "Alert: ";
@@ -291,5 +282,20 @@ public class AppointmentForm {
         }
 
         return true;
+    }
+
+    public AppointmentComparator appointmentComparator()
+    {
+        return (appointment1, appointment2) ->
+        { return appointment1.getID() == appointment2.getID()
+                && appointment1.getCustomerID() == appointment2.getCustomerID()
+                && appointment1.getUserID() == appointment2.getUserID()
+                && appointment1.getContactID() == appointment2.getContactID()
+                && appointment1.getTitle().equals(appointment2.getTitle())
+                && appointment1.getDescription().equals(appointment2.getDescription())
+                && appointment1.getLocation().equals(appointment2.getLocation())
+                && appointment1.getType().equals(appointment2.getType())
+                && appointment1.getStart().equals(appointment2.getStart())
+                && appointment1.getEnd().equals(appointment2.getEnd()); };
     }
 }

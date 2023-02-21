@@ -140,11 +140,10 @@ public class CustomerForm {
     public void onSelectCountry() {
         String countryName = countryComboBox.getValue();
         ObservableList<String> divisionNames = FXCollections.observableArrayList();
+        ObservableList<FirstLevelDivision> divisions =  DivisionQuery.getAllDivisionsForCountry(CountryQuery.getCountryFromName(countryName));
 
-        for (FirstLevelDivision division : DivisionQuery.getAllDivisionsForCountry(CountryQuery.getCountryFromName(countryName)))
-        {
-            divisionNames.add(division.getDivision());
-        }
+       divisions.forEach( division -> divisionNames.add(division.getDivision()));
+
 
         divisionComboBox.setItems(divisionNames);
     }

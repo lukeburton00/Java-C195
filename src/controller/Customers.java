@@ -40,17 +40,24 @@ public class Customers
 
     public static Customer selectedCustomer;
     public static boolean updatingCustomer;
+    public Button clearReportButton;
+
     public void initialize() throws SQLException {
         System.out.println("Customer view initialized.");
 
         if (Appointments.viewingCustomerReport)
         {
             customers = Appointments.reportCustomers;
+
+            clearReportButton.setVisible(true);
+            clearReportButton.setDisable(false);
         }
 
         else
         {
             customers = CustomerQuery.getAllCustomers();
+            clearReportButton.setVisible(false);
+            clearReportButton.setDisable(true);
         }
 
         updateCustomersView();
@@ -94,7 +101,6 @@ public class Customers
         String content = "All appointments associated with this customer will be deleted.";
 
         FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.CONFIRMATION);
-
 
         if (selectedCustomer == null)
         {
@@ -140,5 +146,13 @@ public class Customers
         customerPostalColumn.setCellValueFactory(new PropertyValueFactory<>("PostalCode"));
         customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("Phone"));
         customerDivisionColumn.setCellValueFactory(new PropertyValueFactory<>("DivisionID"));
+    }
+
+    public void onClearReport(ActionEvent actionEvent)
+    {
+        customers = CustomerQuery.getAllCustomers();
+        updateCustomersView();
+        clearReportButton.setVisible(false);
+        clearReportButton.setDisable(true);
     }
 }
