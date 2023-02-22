@@ -19,9 +19,13 @@ import util.CustomerQuery;
 import util.FlashMessage;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Objects;
 
+/**
+ * Customers controller is responsible for displaying all customers and routing to
+ * the form used for adding and updating customers. This controller also serves to display the
+ * results of the additional defined report per project requirements.
+ */
 public class Customers
 {
     public static ObservableList<Customer> customers;
@@ -42,7 +46,11 @@ public class Customers
     public static boolean updatingCustomer;
     public Button clearReportButton;
 
-    public void initialize() throws SQLException {
+    /**
+     * initialize fills the customers tableview with customers queried from the database,
+     * whether that be the full roster or the result of the report.
+     */
+    public void initialize() {
         System.out.println("Customer view initialized.");
 
         if (Appointments.viewingCustomerReport)
@@ -63,6 +71,11 @@ public class Customers
         updateCustomersView();
     }
 
+    /**
+     * onAddCustomer routes the user to the customer form.
+     * @param actionEvent the event triggered by the add customer button.
+     * @throws IOException the exception thrown in case of page loading error.
+     */
     public void onAddCustomer(ActionEvent actionEvent) throws IOException {
         updatingCustomer = false;
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customer_form.fxml")));
@@ -72,6 +85,11 @@ public class Customers
         stage.show();
     }
 
+    /**
+     * onUpdateCustomer routes the user to the customer form with the data from the selected customer.
+     * @param actionEvent the event triggered by the update customer button.
+     * @throws IOException the exception thrown in case of page loading error.
+     */
     public void onUpdateCustomer(ActionEvent actionEvent) throws IOException {
         updatingCustomer = true;
         selectedCustomer =  customersTable.getSelectionModel().getSelectedItem();
@@ -93,7 +111,11 @@ public class Customers
         stage.show();
     }
 
-    public void onDeleteCustomer(ActionEvent actionEvent) {
+    /**
+     * onDeleteCustomer asks for confirmation, then deletes the selected customer along with
+     * all associated appointments.
+     */
+    public void onDeleteCustomer() {
         selectedCustomer =  customersTable.getSelectionModel().getSelectedItem();
 
         String title = "Confirmation";
@@ -129,6 +151,11 @@ public class Customers
         updateCustomersView();
     }
 
+    /**
+     * onBack routes the user to the appointments view.
+     * @param actionEvent the event triggered by the back button.
+     * @throws IOException the exception thrown in case of a page loading error.
+     */
     public void onBack(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appointments.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -137,6 +164,9 @@ public class Customers
         stage.show();
     }
 
+    /**
+     * updateCustomersView fills the customers tableview based on the customers member variable.
+     */
     public void updateCustomersView()
     {
         customersTable.setItems(customers);
@@ -148,7 +178,10 @@ public class Customers
         customerDivisionColumn.setCellValueFactory(new PropertyValueFactory<>("DivisionID"));
     }
 
-    public void onClearReport(ActionEvent actionEvent)
+    /**
+     * onClearReport cancels the filter created by the report run on the appointments view.
+     */
+    public void onClearReport()
     {
         customers = CustomerQuery.getAllCustomers();
         updateCustomersView();

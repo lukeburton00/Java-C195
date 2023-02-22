@@ -2,17 +2,23 @@ package util;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.Appointment;
 import model.Customer;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * CustomerQuery is the utility through which the app queries the Customers table.
+ */
 public abstract class CustomerQuery
 {
 
-    public static int addCustomer(Customer customer)
+    /**
+     * addCustomer pushes a customer object to the database.
+     * @param customer the customer to add.
+     */
+    public static void addCustomer(Customer customer)
     {
         try
         {
@@ -28,16 +34,20 @@ public abstract class CustomerQuery
             preparedStatement.setInt(6, customer.getDivisionID());
 
             System.out.println("Customer successfully added.");
-            return preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         }
 
         catch (SQLException e)
         {
             String errorMessage = e.getMessage();
             System.out.println(errorMessage);
-            return 0;
         }
     }
+
+    /**
+     * getAllCustomers returns a list of all customers in the database via query.
+     * @return the list of customers. ObservableList
+     */
     public static ObservableList<Customer> getAllCustomers()
     {
         try
@@ -72,6 +82,12 @@ public abstract class CustomerQuery
         }
     }
 
+    /**
+     * getAllCustomersForCountry returns a list of all customers associated with a given country via a JOIM
+     * query through the FirstLevelDivisions table.
+     * @param countryID the ID of the country to query.
+     * @return the list of customers. ObservableList
+     */
     public static ObservableList<Customer> getAllCustomersForCountry(int countryID)
     {
         try
@@ -110,7 +126,11 @@ public abstract class CustomerQuery
         }
     }
 
-    public static int deleteCustomer(Customer customer)
+    /**
+     * deleteCustomer deletes a selected customer from the database.
+     * @param customer the customer to delete.
+     */
+    public static void deleteCustomer(Customer customer)
     {
         try
         {
@@ -119,17 +139,21 @@ public abstract class CustomerQuery
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, Integer.toString(customer.getID()));
 
-            return preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         }
 
         catch (SQLException e)
         {
             String errorMessage = e.getMessage();
             System.out.println(errorMessage);
-            return 0;
         }
     }
 
+    /**
+     * getCurrentMaxID finds the highest ID in the customers table. This is used to auto-increment new customer Ids
+     * upon creation.
+     * @return the id. Integer
+     */
     public static int getCurrentMaxID()
     {
         try

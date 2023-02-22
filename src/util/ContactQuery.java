@@ -8,8 +8,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * ContactQuery is the utility through which the app queries the Contacts table.
+ */
 public abstract class ContactQuery
 {
+    /**
+     * getAllContacts queries the contacts table for all contacts
+     * @return the list of contacts. ObservableList
+     */
     public static ObservableList<Contact> getAllContacts()
     {
         try
@@ -43,6 +50,11 @@ public abstract class ContactQuery
         }
     }
 
+    /**
+     * getContactIDFromName converts a given string contact name to a corresponding ID via database query
+     * @param name the name to convert
+     * @return the id. Integer
+     */
     public static int getContactIDFromName(String name)
     {
         try
@@ -64,6 +76,11 @@ public abstract class ContactQuery
         }
     }
 
+    /**
+     * getContactNameFromID converts a given integer id to a corresponding name via database query
+     * @param id the id to convert
+     * @return the name. String
+     */
     public static String getContactNameFromID(int id)
     {
         try

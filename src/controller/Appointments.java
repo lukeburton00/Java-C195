@@ -20,6 +20,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Appointments controller serves the primary purpose of displaying appointments from the database
+ * according to filter criteria, including simply displaying all appointments. This controller also routes the user to
+ * other relevant pages on request. Reports are also displayed per project requirements.
+ */
 public class Appointments
 {
 
@@ -61,6 +66,13 @@ public class Appointments
     public static boolean viewingCustomerReport;
 
 
+    /** <strong>This function utilizes a Lambda expression per project requirements.</strong>
+     * initialize builds the appointments tableview and fills with database data. Comboboxes are also
+     * populated with their respective required data to be used for filtering table data. Initialize is also
+     * responsible for calling checkForUpcomingAppointment(), which alerts the user of any upcoming appointments.
+     * <strong>Lambda expressions are used to fill ObservableLists for Comboboxes. These lambda expressions
+     * simplify the loop and improve readability.</strong>
+     */
     public void initialize() {
         System.out.println("Appointment view initialized.");
 
@@ -98,6 +110,11 @@ public class Appointments
     }
 
 
+    /**
+     * onAddAppointment routes the user to appointmentForm upon request.
+     * @param actionEvent the event triggerd by the button.
+     * @throws IOException the exception thrown in case of page loading error.
+     */
     public void onAddAppointment(ActionEvent actionEvent) throws IOException {
         updatingAppointment = false;
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/appointment_form.fxml")));
@@ -107,6 +124,12 @@ public class Appointments
         stage.show();
     }
 
+    /**
+     * onUpdateAppointment grabs the selected appointment from the tableview and routes the user
+     * to the appointmentForm along with the appointment data. If no appointment is selected, an error appears.
+     * @param actionEvent the event triggered by the update appointment button.
+     * @throws IOException the exception thrown in case of a page laoding error.
+     */
     public void onUpdateAppointment(ActionEvent actionEvent) throws IOException {
         selectedAppointment = appointmentsTable.getSelectionModel().getSelectedItem();
 
@@ -128,7 +151,11 @@ public class Appointments
         stage.show();
     }
 
-    public void onDeleteAppointment(ActionEvent actionEvent) {
+    /**
+     * onDeleteAppointment checks if an appointment is selected, and displays error if not. Them, the appointment
+     * is deleted. A message displaying the canceled appointment info is displayed. The view is updated.
+     */
+    public void onDeleteAppointment() {
         selectedAppointment = appointmentsTable.getSelectionModel().getSelectedItem();
         String title;
         String header;
@@ -157,6 +184,11 @@ public class Appointments
         message.display();
     }
 
+    /**
+     * onLogOut routes the user to the login page.
+     * @param actionEvent the event triggered by the log out button.
+     * @throws IOException the exception thrown in case of a page loading error.
+     */
     public void onLogOut(ActionEvent actionEvent) throws IOException {
         checkedForAppointment = false;
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/log_in_form.fxml")));
@@ -166,6 +198,11 @@ public class Appointments
         stage.show();
     }
 
+    /**
+     * onViewCustomers routes the user to the customers view.
+     * @param actionEvent the event triggerd by the View Customers button.
+     * @throws IOException the exception thrown in case of a page loading error.
+     */
     public void onViewCustomers(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customers.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -174,6 +211,10 @@ public class Appointments
         stage.show();
     }
 
+    /**
+     * updateAppointmentsView takes the member variable appointments and converts
+     * all start and end times to system time. The appointments are then displayed in the view.
+     */
     private void updateAppointmentsView()
     {
         for (Appointment appointment : appointments)
@@ -199,6 +240,10 @@ public class Appointments
         appointmentContactIDColumn.setCellValueFactory(new PropertyValueFactory<>("ContactID"));
     }
 
+    /**
+     * checkForUpcomingAppointments queries the database for appointments that start
+     * within 15 minutes of login. A message is displayed with the result.
+     */
     private void checkForUpcomingAppointment()
     {
 
@@ -229,7 +274,11 @@ public class Appointments
         message.display();
     }
 
-    public void onSelectWeekRadio(ActionEvent actionEvent) {
+    /**
+     * onSelectWeekRadio gets appointments for the current week from the database and updates
+     * the appointment view. The combobox for the other filter is disabled.
+     */
+    public void onSelectWeekRadio() {
         appointments = AppointmentQuery.getAllAppointmentsForThisWeek();
         updateAppointmentsView();
         monthBox.setVisible(false);
@@ -237,14 +286,20 @@ public class Appointments
         monthBox.setDisable(true);
     }
 
-    public void onSelectMonthRadio(ActionEvent actionEvent) {
+    /**
+     * onSelectMonthRadio enables the combobox for filtering by month.
+     */
+    public void onSelectMonthRadio() {
 
         monthBox.setVisible(true);
         monthBox.setDisable(false);
         monthBox.setValue(null);
     }
 
-    public void onClearFilter(ActionEvent actionEvent) {
+    /**
+     * onClearFilter updates the appointment view with all appointments, undoing any filter.
+     */
+    public void onClearFilter() {
         filterGroup.selectToggle(null);
 
         appointments = AppointmentQuery.getAllAppointments();
@@ -255,7 +310,10 @@ public class Appointments
         monthBox.setValue(null);
     }
 
-    public void onSelectMonthBox(ActionEvent actionEvent) {
+    /**
+     * onSelectMonthBox filters the appointment view based on the selected month.
+     */
+    public void onSelectMonthBox() {
         String month = monthBox.getValue();
         System.out.println(month);
 
@@ -269,7 +327,11 @@ public class Appointments
 
     }
 
-    public void onViewTypeMonthReport(ActionEvent actionEvent)
+    /**
+     * onViewTypeMonthReport displays the appointment report based on appointment type and month selected
+     * in the appropriate comboboxes.
+     */
+    public void onViewTypeMonthReport()
     {
         String type = appointmentReportBox.getValue();
         String month = monthReportBox.getValue();
@@ -298,7 +360,10 @@ public class Appointments
 
     }
 
-    public void onViewContactReport(ActionEvent actionEvent)
+    /**
+     * onViewContactReport displays the schedule for the selected contact.
+     */
+    public void onViewContactReport()
     {
         String contactName = contactReportBox.getValue();
 
@@ -327,6 +392,9 @@ public class Appointments
         message.display();
     }
 
+    /**
+     * setMonthBoxes populates the month comboboxes.
+     */
     public void setMonthBoxes()
     {
         ObservableList<String> months = FXCollections.observableArrayList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
@@ -334,6 +402,12 @@ public class Appointments
         monthReportBox.setItems(months);
     }
 
+    /**
+     * onViewCountryReportBox routes the user to the Customer view and displays the report showing
+     * the total number of customers for the selected country.
+     * @param actionEvent the event triggerd by the button.
+     * @throws IOException the exception thrown in case of page loading error.
+     */
     public void onViewCountryReport(ActionEvent actionEvent) throws IOException {
         String countryName = countryReportBox.getValue();
 
@@ -374,7 +448,5 @@ public class Appointments
             FlashMessage message = new FlashMessage(title, header, content, Alert.AlertType.INFORMATION);
             message.display();
         }
-
-
     }
 }

@@ -18,6 +18,10 @@ import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * LogInForm controller handles log in attempts and routes the user to the appointments view
+ * upon successful log in.
+ */
 public class LogInForm {
     public TextField userNameField;
     public PasswordField passwordField;
@@ -28,6 +32,10 @@ public class LogInForm {
     public Label locationMarkerLabel;
     String systemLanguage;
 
+    /**
+     * initialize has the main responsibility of translating the interface based on the user
+     * system language settings.
+     */
     public void initialize()
     {
         System.out.println("Login form initialized.");
@@ -55,6 +63,13 @@ public class LogInForm {
         System.out.println(Time.systemToUTC(LocalDateTime.now()));
     }
 
+    /**
+     * onSignIn validates the username and password fields using a database query. If the validation is
+     * successful, the user is routed to the appointments view. If not, an error message is displayed.
+     * Either way, the result is logged to login_activity.txt
+     * @param actionEvent the event triggered by the sign in button.
+     * @throws IOException the exception thrown in case of page loading error.
+     */
     public void onSignIn(ActionEvent actionEvent) throws IOException
     {
         if (UserQuery.authenticate(userNameField.getText(), passwordField.getText())) {

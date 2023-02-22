@@ -17,6 +17,11 @@ import util.*;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * CustomerForm handles interactions with the Customers table where data input is necessary.
+ * This includes adding and updating customers. This controller links with the customers_form view and utilizes
+ * the Country, Customer, and First Level Division model classes.
+ */
 public class CustomerForm {
     public Button cancelButton;
     public Button saveButton;
@@ -30,6 +35,10 @@ public class CustomerForm {
     public ObservableList<ComboBox<String>> comboBoxes;
     public ObservableList<TextField> textFields;
 
+    /**
+     * initialize checks if a customer is being updated, and fills all fields with selected customer data
+     * if so. Otherwise, fields are built with default values.
+     */
     public void initialize()
     {
         System.out.println("Customer form initialized.");
@@ -77,6 +86,11 @@ public class CustomerForm {
         onSelectCountry();
     }
 
+    /**
+     * onCancel routes the user to the Customers view.
+     * @param actionEvent the event triggered by the cancel button.
+     * @throws IOException the exception thrown in case of a page loading error.
+     */
     public void onCancel(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/customers.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -85,6 +99,12 @@ public class CustomerForm {
         stage.show();
     }
 
+    /**
+     * onSave first checks that all fields have value. Then, a customer object is created. This object
+     * is saved to the database. The user is routed to the Customer view.
+     * @param actionEvent the event triggered by the save button.
+     * @throws IOException the exception thrown in case of page loading error.
+     */
     public void onSave(ActionEvent actionEvent) throws IOException {
         for (TextField field : textFields)
         {
@@ -119,8 +139,6 @@ public class CustomerForm {
         String phone = phoneField.getText();
         int divisionID = DivisionQuery.getDivisionFromName(divisionComboBox.getValue()).getID();
 
-
-
         if (Customers.updatingCustomer)
         {
             CustomerQuery.deleteCustomer(Customers.selectedCustomer);
@@ -137,6 +155,9 @@ public class CustomerForm {
 
     }
 
+    /**
+     * onSelectCountry populates the division combobox with the divisions from the selected country.
+     */
     public void onSelectCountry() {
         String countryName = countryComboBox.getValue();
         ObservableList<String> divisionNames = FXCollections.observableArrayList();

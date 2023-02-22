@@ -1,14 +1,31 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
+/**
+ * Appointment is the object to be created when performing CRUD operations on the Appointments table
+ * for the MySQL database. An Appointment object is meant to be temporary; it stores data pulled from
+ * the database upon which the application operates.
+ */
 public class Appointment
 {
     private int mID, mCustomerID, mUserID, mContactID;
     private String mTitle, mDescription, mLocation, mType;
     private LocalDateTime mStart, mEnd;
 
+    /**
+     * Constructor initializes Appointment object and members.
+     * @param id the id, Integer
+     * @param title the title, String
+     * @param description the description, String
+     * @param location the location, String
+     * @param type the type, String
+     * @param start the start, LocalDateTime
+     * @param end the end, LocalDateTime
+     * @param customer_id the id for the Customer associated with this appointment in-database, Integer
+     * @param user_id the id for the User associated with this appointment in-database, Integer
+     * @param contact_id the id for the Contact associated with this appointment in-database, Integer
+     */
     public Appointment(int id, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customer_id, int user_id, int contact_id)
     {
         mID = id;
@@ -23,90 +40,105 @@ public class Appointment
         mContactID = contact_id;
     }
 
+    /**
+     *
+     * @return ID, Integer
+     */
     public int getID()
     {
         return mID;
     }
 
+    /**
+     * set ID
+     * @param ID the value to be used, Integer
+     */
     public void setID(int ID) { mID = ID; }
 
+    /**
+     *
+     * @return ID for Customer associated with this Appointment, Integer
+     */
     public int getCustomerID()
     {
         return mCustomerID;
     }
 
-    public void setCustomerID(int customerID) { mCustomerID = customerID; }
-
+    /**
+     *
+     * @return ID for User associated with this Appointment, Integer
+     */
     public int getUserID()
     {
         return mUserID;
     }
 
-    public void setUserID(int userID) { mUserID = userID; }
-
+    /**
+     *
+     * @return ID for Contact associated with this Appointment, Integer
+     */
     public int getContactID()
     {
         return mContactID;
     }
 
-    public void setContactID(int contactID) { mContactID = contactID; }
-
+    /**
+     *
+     * @return Title, String
+     */
     public String getTitle() { return mTitle; }
 
-    public void setTitle(String title) { mTitle = title; }
-
+    /**
+     *
+     * @return Description, String
+     */
     public String getDescription()
     {
         return mDescription;
     }
 
-    public void setDescription(String description) { mDescription = description; }
-
+    /**
+     *
+     * @return Location, String
+     */
     public String getLocation() { return mLocation; }
 
-    public void setLocation(String location) { mLocation = location; }
-
+    /**
+     *
+     * @return Type, String
+     */
     public String getType()
     {
         return mType;
     }
 
-    public void setType(String type) { mType = type; }
-
+    /**
+     *
+     * @return Start, LocalDateTime
+     */
     public LocalDateTime getStart()
     {
         return mStart;
     }
 
+    /**
+     * set Start
+     * @param start the value to be used, LocalDateTime
+     */
     public void setStart(LocalDateTime start) { mStart = start; }
 
+    /**
+     *
+     * @return End, LocalDateTime
+     */
     public LocalDateTime getEnd()
     {
         return mEnd;
     }
 
+    /**
+     * set End
+     * @param end the value to be used, LocalDateTime
+     */
     public void setEnd(LocalDateTime end) { mEnd = end; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Appointment that = (Appointment) o;
-
-        return this.getID() == that.getID()
-                && this.getCustomerID() == that.getCustomerID()
-                && this.getUserID() == that.getUserID()
-                && this.getContactID() == that.getContactID()
-                && this.getTitle().equals(that.getTitle())
-                && this.getDescription().equals(that.getDescription())
-                && this.getLocation().equals(that.getLocation())
-                && this.getType().equals(that.getType())
-                && this.getStart().equals(that.getStart())
-                && this.getEnd().equals(that.getEnd());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(mID, mCustomerID, mUserID, mContactID, mTitle, mDescription, mLocation, mType, mStart, mEnd);
-    }
 }

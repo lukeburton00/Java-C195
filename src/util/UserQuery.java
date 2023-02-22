@@ -4,8 +4,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * UserQuery is a utility for querying the User table in the database. Functionality is limited,
+ * as the scope of the application does not involve the full CRUD suite of operations.
+ */
 public abstract class UserQuery {
 
+    /**
+     * authenticate returns true of a user exists with the given username and password
+     * @param userName the username for the user query
+     * @param password the password for the user query
+     * @return true if user exists, false otherwise
+     */
     public static boolean authenticate(String userName, String password)
     {
         try

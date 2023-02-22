@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import model.Appointment;
 import model.Customer;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,10 +13,17 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 
+/**
+ * AppointmentQuery is the utility through which the app queries the Appointments table.
+ */
 public abstract class AppointmentQuery
 {
 
-    public static int addAppointment(Appointment appointment)
+    /**
+     * addAppointment pushes a given appointment to the database.
+     * @param appointment the appointment to add.
+     */
+    public static void addAppointment(Appointment appointment)
     {
         try
         {
@@ -37,17 +43,20 @@ public abstract class AppointmentQuery
             preparedStatement.setString(10, Integer.toString(appointment.getContactID()));
 
             System.out.println("Appointment successfully added.");
-            return preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         }
 
         catch (SQLException e)
         {
             String errorMessage = e.getMessage();
             System.out.println(errorMessage);
-            return 0;
         }
     }
 
+    /**
+     * get all appointments in database.
+     * @return a list of appointments. ObservableList
+     */
     public static ObservableList<Appointment> getAllAppointments()
     {
         try
@@ -88,7 +97,11 @@ public abstract class AppointmentQuery
         }
     }
 
-    public static int deleteAppointment(Appointment appointment)
+    /**
+     * deleteAppointment removes a given appointment from the database.
+     * @param appointment the appointment to delete
+     */
+    public static void deleteAppointment(Appointment appointment)
     {
         try
         {
@@ -97,17 +110,21 @@ public abstract class AppointmentQuery
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, Integer.toString(appointment.getID()));
 
-            return preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
         }
 
         catch (SQLException e)
         {
             String errorMessage = e.getMessage();
             System.out.println(errorMessage);
-            return 0;
         }
     }
 
+    /**
+     * getCurrentMaxID returns the highest ID currently held by an appointment in the database.
+     * This is used to auto-increment the ID for new appointments.
+     * @return the max ID. Integer
+     */
     public static int getCurrentMaxID()
     {
         try
@@ -129,6 +146,11 @@ public abstract class AppointmentQuery
         }
     }
 
+    /**
+     * getAllAppointmentsForCustomer returns all appointmetns associated with a given customer.
+     * @param customer the customer object for which to get appointments
+     * @return the list of appointments. ObservableList
+     */
     public static ObservableList<Appointment> getAllAppointmentsForCustomer(Customer customer)
     {
         try
@@ -170,6 +192,11 @@ public abstract class AppointmentQuery
         }
     }
 
+    /**
+     * getAllAppointmentsForThisWeek queries for appointments that fall between now and one week
+     * from now.
+     * @return the list of appointments. ObservableList
+     */
     public static ObservableList<Appointment> getAllAppointmentsForThisWeek()
     {
         try
@@ -210,6 +237,11 @@ public abstract class AppointmentQuery
         }
     }
 
+    /**
+     * getAllAppointmentsForMonth queries for a list of appointments that fall within a given month.
+     * @param month the month to check
+     * @return the list of appointments. ObservableList
+     */
     public static ObservableList<Appointment> getAllAppointmentsForMonth(String month)
     {
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("MMM");
@@ -255,6 +287,13 @@ public abstract class AppointmentQuery
         }
     }
 
+    /**
+     * getAllAppointmentsForTypeAndMonth queries for a list of appointments filterd by a given type and
+     * a given month.
+     * @param type the type to filter
+     * @param month the month to filter
+     * @return the list of appointments. ObservableList
+     */
     public static ObservableList<Appointment> getAllAppointmentsForTypeAndMonth(String type, String month)
     {
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("MMM");
@@ -301,6 +340,11 @@ public abstract class AppointmentQuery
         }
     }
 
+    /**
+     * getAllAppointmentsForContactID queries for appointments associated with a contact.
+     * @param id the ID of the contact
+     * @return the list of appointments. ObservableList
+     */
     public static ObservableList<Appointment> getAllAppointmentsForContactID(int id)
     {
 
@@ -343,6 +387,10 @@ public abstract class AppointmentQuery
         }
     }
 
+    /**
+     * getAllAppointmentTypes queries for all types of appoiontments.
+     * @return the list of types. ObservableList
+     */
     public static ObservableList<String> getAllAppointmentTypes()
     {
         try

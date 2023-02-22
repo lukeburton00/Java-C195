@@ -5,6 +5,9 @@ import javafx.scene.chart.ScatterChart;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * JDBC is a simple utility that creates and destroys a database connection.
+ */
 public abstract class JDBC
 {
     private static final String protocol = "jdbc";
@@ -20,6 +23,9 @@ public abstract class JDBC
 
     public static Connection connection;
 
+    /**
+     * openConnection gets a connection to a database based on the member variables.
+     */
     public static void openConnection()
     {
         try
@@ -36,6 +42,9 @@ public abstract class JDBC
         }
     }
 
+    /**
+     * closeConnection closes the existing database connection.
+     */
     public static void closeConnection()
     {
         try

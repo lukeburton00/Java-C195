@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * Customer is the object to be created when performing CRUD operations on the Customer table
+ * for the MySQL database. A Customer object is meant to be temporary; it stores data pulled from
+ * the database upon which the application operates.
+ */
 public class Customer
 {
     private int mID;
@@ -9,6 +14,15 @@ public class Customer
     private String mPostalCode;
     private String mPhone;
 
+    /**
+     * Constructor initializes Customer object and members.
+     * @param id the id, Integer
+     * @param divisionID the id for the associated First Level Division, Integer
+     * @param name the name, String
+     * @param address the address, String
+     * @param postalCode the postal code, String
+     * @param phone the phone, String
+     */
     public Customer(int id, int divisionID, String name, String address, String postalCode, String phone)
     {
         mID = id;
@@ -20,27 +34,51 @@ public class Customer
 
     }
 
+    /**
+     *
+     * @return the id, Integer
+     */
     public int getID() { return mID; }
 
+    /**
+     * set the id
+     * @param ID the value to be used, Integer
+     */
     public void setID(int ID) { mID = ID; }
 
+    /**
+     *
+     * @return the id for the associated First Level Division, Integer
+     */
     public int getDivisionID() { return mDivisionID; }
 
-    public void setDivisionID(int DivisionID) { mDivisionID = DivisionID; }
-
+    /**
+     *
+     * @return the name, String
+     */
     public String getName() { return mName; }
 
+    /**
+     * set the name
+     * @param Name the value to be used, String
+     */
     public void setName(String Name) { mName = Name; }
 
+    /**
+     *
+     * @return the address, String
+     */
     public String getAddress() { return mAddress; }
 
-    public void setAddress(String Address) { mAddress = Address; }
-
+    /**
+     *
+     * @return the postal code, String
+     */
     public String getPostalCode() { return mPostalCode; }
 
-    public void setPostalCode(String PostalCode) { mPostalCode = PostalCode; }
-
+    /**
+     *
+     * @return the phone, String
+     */
     public String getPhone() { return mPhone; }
-
-    public void setPhone(String Phone) { mPhone = Phone; }
 }

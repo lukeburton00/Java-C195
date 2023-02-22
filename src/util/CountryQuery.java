@@ -3,13 +3,20 @@ package util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Country;
-import model.FirstLevelDivision;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * CountryQuery is the utility through which the app queries the Countries table.
+ */
 public abstract class CountryQuery {
+
+    /**
+     * getAllCountries queries the database for a list of all countries
+     * @return the list of countries. ObservableList
+     */
     public static ObservableList<Country> getAllCountries()
     {
         try
@@ -40,6 +47,11 @@ public abstract class CountryQuery {
         }
     }
 
+    /**
+     * getCountryFromName converts a country name to a country object via database query.
+     * @param name the string name to convert
+     * @return the country object.
+     */
     public static Country getCountryFromName(String name)
     {
         try {
@@ -67,6 +79,11 @@ public abstract class CountryQuery {
             }
         }
 
+    /**
+     * getCountryFromDivisionID converts a division id to a country object via database query.
+     * @param division the id to convert.
+     * @return the country object
+     */
     public static Country getCountryFromDivisionID(int division)
     {
         try {

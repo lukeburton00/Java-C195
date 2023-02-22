@@ -9,7 +9,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * DivisionQuery is the utility through which the app queries the FirstLevelDivisions table.
+ */
 public abstract class DivisionQuery {
+    /**
+     * getAllDivisionsForCountry returns a list of all divisions for a given country via database query,
+     * @param country the country for which to return the list.
+     * @return the list of divisions. ObservableList
+     */
     public static ObservableList<FirstLevelDivision> getAllDivisionsForCountry(Country country)
     {
         try
@@ -42,6 +50,11 @@ public abstract class DivisionQuery {
         }
     }
 
+    /**
+     * getDivisionFromID returns a FirstLevelDivision object from a given ID via database query.
+     * @param division the division ID to query.
+     * @return the FirstLevelDivision object.
+     */
     public static FirstLevelDivision getDivisionFromID(int division) {
         try {
             String sqlStatement = "SELECT * FROM first_level_divisions WHERE Division_ID = ?";
@@ -66,6 +79,11 @@ public abstract class DivisionQuery {
         }
     }
 
+    /**
+     * getDivisionFromName returns a FirstLevelDivision object from a given String via database query.
+     * @param division the name of the division to query.
+     * @return the FirstLevelDivision object.
+     */
     public static FirstLevelDivision getDivisionFromName(String division) {
         try {
             String sqlStatement = "SELECT * FROM first_level_divisions WHERE Division = ?";
