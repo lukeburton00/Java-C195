@@ -27,8 +27,8 @@ public abstract class AppointmentQuery
     {
         try
         {
-            String sqlStatement = "INSERT INTO Appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            String sqlStatement = "insert into Appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)" +
+                    "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, Integer.toString(appointment.getID()));
@@ -62,7 +62,7 @@ public abstract class AppointmentQuery
         try
         {
             // The SQL Statement to execute
-            String sqlStatement = "SELECT * FROM appointments";
+            String sqlStatement = "select * from appointments";
 
             // Prepare the SQL Statement for setting variables
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
@@ -105,7 +105,7 @@ public abstract class AppointmentQuery
     {
         try
         {
-            String sqlStatement = "DELETE FROM appointments WHERE Appointment_ID = ?";
+            String sqlStatement = "delete from appointments where Appointment_ID = ?";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, Integer.toString(appointment.getID()));
@@ -147,7 +147,7 @@ public abstract class AppointmentQuery
     }
 
     /**
-     * getAllAppointmentsForCustomer returns all appointmetns associated with a given customer.
+     * getAllAppointmentsForCustomer returns all appointments associated with a given customer.
      * @param customer the customer object for which to get appointments
      * @return the list of appointments. ObservableList
      */
@@ -156,7 +156,7 @@ public abstract class AppointmentQuery
         try
         {
             // The SQL Statement to execute
-            String sqlStatement = "SELECT * FROM appointments WHERE Customer_ID = ?";
+            String sqlStatement = "select * from appointments where Customer_ID = ?";
 
             // Prepare the SQL Statement for setting variables
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
@@ -288,7 +288,7 @@ public abstract class AppointmentQuery
     }
 
     /**
-     * getAllAppointmentsForTypeAndMonth queries for a list of appointments filterd by a given type and
+     * getAllAppointmentsForTypeAndMonth queries for a list of appointments filtered by a given type and
      * a given month.
      * @param type the type to filter
      * @param month the month to filter
@@ -388,7 +388,7 @@ public abstract class AppointmentQuery
     }
 
     /**
-     * getAllAppointmentTypes queries for all types of appoiontments.
+     * getAllAppointmentTypes queries for all types of appointments.
      * @return the list of types. ObservableList
      */
     public static ObservableList<String> getAllAppointmentTypes()
@@ -396,7 +396,7 @@ public abstract class AppointmentQuery
         try
         {
             // The SQL Statement to execute
-            String sqlStatement = "select Type from appointments;";
+            String sqlStatement = "select distinct Type from appointments;";
 
             // Prepare the SQL Statement for setting variables
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);

@@ -22,7 +22,7 @@ public abstract class ContactQuery
         try
         {
             // The SQL Statement to execute
-            String sqlStatement = "SELECT * FROM contacts;";
+            String sqlStatement = "select * from contacts;";
 
             // Prepare the SQL Statement for setting variables
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
@@ -59,7 +59,7 @@ public abstract class ContactQuery
     {
         try
         {
-            String sqlStatement = "SELECT Contact_ID FROM contacts WHERE Contact_Name = ?";
+            String sqlStatement = "select Contact_ID from contacts where Contact_Name = ?";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, name);
@@ -85,7 +85,7 @@ public abstract class ContactQuery
     {
         try
         {
-            String sqlStatement = "SELECT Contact_Name FROM contacts WHERE Contact_ID = ?";
+            String sqlStatement = "select Contact_Name from contacts where Contact_ID = ?";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setInt(1, id);

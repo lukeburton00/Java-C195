@@ -22,8 +22,8 @@ public abstract class CustomerQuery
     {
         try
         {
-            String sqlStatement = "INSERT INTO Customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
-                    "VALUES (?, ?, ?, ?, ?, ?);";
+            String sqlStatement = "insert into Customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
+                    "values (?, ?, ?, ?, ?, ?);";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, Integer.toString(customer.getID()));
@@ -52,7 +52,7 @@ public abstract class CustomerQuery
     {
         try
         {
-            String sqlStatement = "SELECT * FROM customers;";
+            String sqlStatement = "select * from customers;";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
 
@@ -83,7 +83,7 @@ public abstract class CustomerQuery
     }
 
     /**
-     * getAllCustomersForCountry returns a list of all customers associated with a given country via a JOIM
+     * getAllCustomersForCountry returns a list of all customers associated with a given country via a join
      * query through the FirstLevelDivisions table.
      * @param countryID the ID of the country to query.
      * @return the list of customers. ObservableList
@@ -134,7 +134,7 @@ public abstract class CustomerQuery
     {
         try
         {
-            String sqlStatement = "DELETE FROM customers WHERE Customer_ID = ?";
+            String sqlStatement = "delete from customers where Customer_ID = ?";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, Integer.toString(customer.getID()));
@@ -158,7 +158,7 @@ public abstract class CustomerQuery
     {
         try
         {
-            String sqlStatement = "select Customer_ID from Customers ORDER BY Customer_ID desc LIMIT 1;";
+            String sqlStatement = "select Customer_ID from Customers order by Customer_ID desc limit 1;";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
 

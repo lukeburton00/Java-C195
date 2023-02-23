@@ -21,7 +21,7 @@ public abstract class UserQuery {
         try
         {
             // The SQL Statement to execute
-            String sqlStatement = "SELECT * FROM users WHERE User_Name = ? AND password = ?";
+            String sqlStatement = "select * from users where User_Name = ? and password = ?";
 
             // Prepare the SQL Statement for setting variables
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);

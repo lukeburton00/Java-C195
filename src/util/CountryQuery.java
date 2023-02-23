@@ -21,7 +21,7 @@ public abstract class CountryQuery {
     {
         try
         {
-            String sqlStatement = "SELECT * FROM countries;";
+            String sqlStatement = "select * from countries;";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
 
@@ -55,7 +55,7 @@ public abstract class CountryQuery {
     public static Country getCountryFromName(String name)
     {
         try {
-            String sqlStatement = "SELECT * FROM countries WHERE country = ?";
+            String sqlStatement = "select * from countries where country = ?";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, name);
@@ -87,7 +87,7 @@ public abstract class CountryQuery {
     public static Country getCountryFromDivisionID(int division)
     {
         try {
-            String sqlStatement = "SELECT * FROM countries WHERE Country_ID = ?";
+            String sqlStatement = "select * from countries where Country_ID = ?";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setInt(1, DivisionQuery.getDivisionFromID(division).getCountryID());

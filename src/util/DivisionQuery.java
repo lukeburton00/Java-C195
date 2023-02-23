@@ -57,7 +57,7 @@ public abstract class DivisionQuery {
      */
     public static FirstLevelDivision getDivisionFromID(int division) {
         try {
-            String sqlStatement = "SELECT * FROM first_level_divisions WHERE Division_ID = ?";
+            String sqlStatement = "select * from first_level_divisions where Division_ID = ?";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setInt(1, division);
@@ -86,7 +86,7 @@ public abstract class DivisionQuery {
      */
     public static FirstLevelDivision getDivisionFromName(String division) {
         try {
-            String sqlStatement = "SELECT * FROM first_level_divisions WHERE Division = ?";
+            String sqlStatement = "select * from first_level_divisions where Division = ?";
 
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(sqlStatement);
             preparedStatement.setString(1, division);

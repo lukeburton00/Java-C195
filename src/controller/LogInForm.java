@@ -76,7 +76,7 @@ public class LogInForm {
             try {
                 System.out.println("Attempting to write to file...\n");
                 FileWriter writer = new FileWriter("login_activity.txt", true);
-                writer.write("Log-in attempt SUCCESS: " + LocalDateTime.now() + " Local Time.\n");
+                writer.write("Log-in attempt by User " + userNameField.getText() + " SUCCESS: "  + LocalDateTime.now() + " Local Time.\n");
                 writer.close();
             }
 

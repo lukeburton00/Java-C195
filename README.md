@@ -24,3 +24,9 @@ be selected, then click the respective "View Report."
 
 
 The project was built by Luke Burton, a student at Western Governors University.
+
+Contact via: 
+
+Email: lburt87@wgu.edu
+
+Phone: 435-375-9723
