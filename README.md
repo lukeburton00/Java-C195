@@ -3,7 +3,7 @@
 This project is a scheduling application providing support for a business operating in multiple countries, timezones, and languages.
 Users can schedule appointments, build a roster of clients, and connect with key contacts to conduct business operations.
 
-App version 0.9
+App version 1.1,
 Updated 2/21/2023
 
 Built using:
